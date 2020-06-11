@@ -12,9 +12,10 @@ const Header = ({ text }) =>
   </h1>
 
 const StatisticLine = ({ text, num }) =>
-  <>
-    {text} {num} <br></br>
-  </>
+  <tr>
+    <td>{text}</td>
+    <td>{num}</td>
+  </tr>
 
 const Statistics = (props) => {
   const {nGood, nNeutral, nBad, g, n, b} = props;
@@ -23,14 +24,16 @@ const Statistics = (props) => {
     const avg = (g,n,b) => (g-b) / (g+n+b);
     const posRatio = (g,n,b) => 100 * g / (g+n+b);
     return (
-    <>
-      <StatisticLine text={nGood} num={g} />
-      <StatisticLine text={nNeutral} num={n} />
-      <StatisticLine text={nBad} num={b} />
-      <StatisticLine text='all' num={sum(g,n,b)} />
-      <StatisticLine text='average' num={avg(g,n,b)} />
-      <StatisticLine text='positive' num={posRatio(g,n,b)} />
-    </>
+    <table>
+      <tbody>
+        <StatisticLine text={nGood} num={g} />
+        <StatisticLine text={nNeutral} num={n} />
+        <StatisticLine text={nBad} num={b} />
+        <StatisticLine text='all' num={sum(g,n,b)} />
+        <StatisticLine text='average' num={avg(g,n,b)} />
+        <StatisticLine text='positive' num={posRatio(g,n,b) + ' %'} />
+      </tbody>
+    </table>
     );
   }
   return (<>No feedback given</>);

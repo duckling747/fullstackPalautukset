@@ -11,7 +11,7 @@ const Header = ({ text }) =>
     {text}
   </h1>
 
-const App = (props) => {
+const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
@@ -28,6 +28,12 @@ const App = (props) => {
     setBad(bad + 1)
   };
 
+  const sum = (a,b,c) => a+b+c;
+
+  const avg = (a,b,c) => (a-c) / (a+b+c);
+
+  const posRatio = (g,n,b) => 100 * g / (g+n+b)
+
   return (
     <>
       <Header text='give feedback' />
@@ -37,7 +43,10 @@ const App = (props) => {
       <Header text='statistics' />
       good {good} <br></br>
       neutral {neutral} <br></br>
-      bad {bad}
+      bad {bad} <br></br>
+      all {sum(good, neutral, bad)} <br></br>
+      average {avg(good, neutral, bad)} <br></br>
+      positive {posRatio(good, neutral, bad)} %
     </>
   );
 };

@@ -11,6 +11,11 @@ const Header = ({ text }) =>
     {text}
   </h1>
 
+const StatisticLine = ({ text, num }) =>
+  <>
+    {text} {num} <br></br>
+  </>
+
 const Statistics = (props) => {
   const {nGood, nNeutral, nBad, g, n, b} = props;
   if (g !== 0 || n !== 0 || b !== 0) {
@@ -19,12 +24,12 @@ const Statistics = (props) => {
     const posRatio = (g,n,b) => 100 * g / (g+n+b);
     return (
     <>
-      {nGood} {g} <br></br>
-      {nNeutral} {n} <br></br>
-      {nBad} {b} <br></br>
-      all {sum(g, n, b)} <br></br>
-      average {avg(g, n, b)} <br></br>
-      positive {posRatio(g, n, b)} %
+      <StatisticLine text={nGood} num={g} />
+      <StatisticLine text={nNeutral} num={n} />
+      <StatisticLine text={nBad} num={b} />
+      <StatisticLine text='all' num={sum(g,n,b)} />
+      <StatisticLine text='average' num={avg(g,n,b)} />
+      <StatisticLine text='positive' num={posRatio(g,n,b)} />
     </>
     );
   }

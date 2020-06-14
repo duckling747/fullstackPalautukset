@@ -1,6 +1,6 @@
 import React from 'react'
 
-const NameEntry = ({ name }) =>
-    <p>{name}</p>
+const NameEntry = ({ name, number }) =>
+    <p>{name} {number}</p>
 
 export default NameEntry

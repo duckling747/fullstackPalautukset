@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ListEntry from './components/ListEntry'
-import OutputLine from './components/OutputLine'
+import CountryList from './components/CountryList';
 
 const App = () => {
 
   const [search, setSearch] = useState('')
   const [response, setResponse] = useState([])
+  const [buttoned, setButtoned] = useState(false)
 
   useEffect(() => {
     axios
@@ -17,53 +17,25 @@ const App = () => {
   }, [])
 
   const handleSearchChange = (event) => {
+    // console.log(event.target.value)
     setSearch(event.target.value)
+    setButtoned(false)
   }
-  const filtered 
-    = response
-      .filter(e => e.name.toLowerCase().includes(search.toLowerCase()))
+
+  const handleButtons = (searchParam) => {
+    setButtoned(true)
+    setSearch(searchParam)
+  }
+  const listToPass = buttoned
+  ? response.filter(e => e.name === search)
+  : response.filter(e => e.name.toLowerCase().includes(search.toLowerCase()))
 
   return (
     <>
       find countries <input value={search} onChange={handleSearchChange} />
-      {
-        (() => {
-          if (filtered.length > 10) {
-            return (
-              <p>
-              too many matches, specify another filter
-              </p>
-            )
-          } else if (filtered.length > 1) {
-            return (
-              <ul>
-                {filtered.map((country, i) => 
-                  <ListEntry key={i} text={country.name} />
-                )}
-              </ul>
-            )
-          } else if (filtered.length === 1) {
-            const country = filtered[0]
-            return (
-              <>
-                <h2>{country.name}</h2>
-                <OutputLine text1='capital' text2={country.capital} />
-                <OutputLine text1='population' text2={country.population} />
-                <h3>languages</h3>
-                <ul>
-                  {country.languages.map((lang, i) =>
-                    <ListEntry key={i} text={lang.name} />
-                  )}
-                </ul>
-                <img src={country.flag} alt="country's flag" width={300} />
-              </>
-            )
-          }
-        })()
-      }
+      <CountryList filtered={listToPass} handleButtons={handleButtons} />
     </>
-    )
-  
+  )
 }
 
 export default App;

@@ -21,15 +21,26 @@ const App = () => {
   const addNumber = (event) => {
     event.preventDefault()
     const numberObject = { name: newName, number:newNumber }
-    if (persons.some(p => p.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+    const duplicate = persons.find(p => p.name === newName)
+    if (duplicate) {
+      const reply = window.confirm(
+      `${newName} is already added to phonebook, \
+replace the old number with a new one?`
+)
+      if (!reply) return
+      numService
+        .update(duplicate.id, { ...duplicate, number: newNumber })
+        .then(returnedNum => {
+          setPersons(
+            persons
+              .filter(p => p !== duplicate)
+              .concat(returnedNum))
+        })
     } else {
       numService
         .create(numberObject)
         .then(returnedNum => {
           setPersons(persons.concat(returnedNum))
-          setNewNumber('')
-          setNewName('')
         })
     }
     setNewName('')

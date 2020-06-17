@@ -51,6 +51,14 @@ const App = () => {
     setFilter(event.target.value)
   }
 
+  const handleDel = (id, name) => {
+    const response 
+      = window.confirm(`Poistetaanko ${name}?`)
+    if (!response) return
+    numService.delNum(id)
+    setPersons(persons.filter(p => p.id !== id))
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -60,7 +68,7 @@ const App = () => {
        newName={newName} handleNameChange={handleNameChange}
        newNumber={newNumber} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter} />
+      <Persons persons={persons} filter={filter} delHandler={handleDel} />
     </div>
   )
 

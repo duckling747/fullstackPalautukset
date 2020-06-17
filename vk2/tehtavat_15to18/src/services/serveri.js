@@ -20,6 +20,12 @@ const update = (id, newObject) => {
             .then(res => res.data)
 }
 
+const delNum = (id) => {
+    return axios
+            .delete(`${baseUrl}/${id}`)
+            .then(res => res.data)
+}
+
 export default {
-    getAll, create, update
+    getAll, create, update, delNum
 }

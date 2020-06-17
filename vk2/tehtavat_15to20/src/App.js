@@ -11,6 +11,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
   const [ message, setMessage ] = useState(null)
+  const [ error, setError ] = useState(false)
 
   useEffect(() => {
       numService
@@ -38,14 +39,24 @@ replace the old number with a new one?`
             persons
               .filter(p => p !== duplicate)
               .concat(returnedNum))
+          setError(false)
           setMessage(`Person ${newName} updated`)
+        })
+        .catch(error => {
+          setError(true)
+          setMessage(`Updating failed to server`)
         })
     } else {
       numService
         .create(numberObject)
         .then(returnedNum => {
           setPersons(persons.concat(returnedNum))
+          setError(false)
           setMessage(`Person ${newName} added`)
+        })
+        .catch(error => {
+          setError(true)
+          setMessage(`Adding failed to server`)
         })
     }
     setTimeout(() => {
@@ -74,18 +85,26 @@ replace the old number with a new one?`
     const response 
       = window.confirm(`Poistetaanko ${name}?`)
     if (!response) return
-    numService.delNum(id)
-    setPersons(persons.filter(p => p.id !== id))
-    setMessage(`Person ${name} deleted`)
+    numService
+      .delNum(id)
+      .then(retval => {
+        setPersons(persons.filter(p => p.id !== id))
+        setError(false)
+        setMessage(`Person ${name} deleted`)
+      })
+      .catch(error => {
+        setError(true)
+        setMessage(`Already gone!`)
+      })
     setTimeout(() => {
       setMessage(null)
     }, 2000);
   }
-
+  const className = error ? "error" : "notification"
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={message} />
+      <Notification message={message} className={className} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h2>Add new number</h2>
       <PersonForm addNumber={addNumber}

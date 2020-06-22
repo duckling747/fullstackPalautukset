@@ -45,6 +45,9 @@ replace the old number with a new one?`
         .catch(error => {
           setError(true)
           setMessage(`Updating failed to server`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
     } else {
       numService
@@ -56,12 +59,12 @@ replace the old number with a new one?`
         })
         .catch(error => {
           setError(true)
-          setMessage(`Adding failed to server`)
+          setMessage(`Adding failed to server: ${error.response.data.error}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
     }
-    setTimeout(() => {
-      setMessage(null)
-    }, 2000)
     setNewName('')
     setNewNumber('')
   }

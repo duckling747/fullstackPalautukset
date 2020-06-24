@@ -14,21 +14,35 @@ const favoriteBlog = blogs => {
     );
 };
 
+const getWinner = (blogs, map) => {
+    return blogs
+        .reduce(
+            (prev, current) =>
+                map[prev.author] > map[current.author]
+                    ? prev
+                    : current
+        );
+};
+
 const mostBlogs = blogs => {
     let writersCounts = {};
     blogs.forEach(blog => {
         writersCounts[blog.author] = (writersCounts[blog.author] || 0) + 1;
     });
-    const winner = blogs
-        .reduce(
-            (prev, current) => 
-                writersCounts[prev.author] > writersCounts[current.author]
-                    ? prev
-                    : current
-        );
+    const winner = getWinner(blogs, writersCounts);
     return { author: winner.author, blogs: writersCounts[winner.author] };
 };
 
+const mostLikes = blogs => {
+    let writerLikes = {};
+    blogs.forEach(blog => {
+        writerLikes[blog.author]
+            = (writerLikes[blog.author] || 0) + blog.likes;
+    });
+    const winner = getWinner(blogs, writerLikes);
+    return { author: winner.author, likes: writerLikes[winner.author] };
+};
+
 module.exports = {
-    dummy, totalLikes, favoriteBlog, mostBlogs
+    dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes
 };

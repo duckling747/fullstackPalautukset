@@ -107,3 +107,17 @@ describe("most active blogger", () => {
     });
 
 });
+
+describe("most liked blogger", () => {
+
+    test("list has one blog", () => {
+        const res = listHelper.mostLikes(listWithOneBlog);
+        expect(res).toEqual({ author: "Edsger W. Dijkstra", likes: 5 });
+    });
+
+    test("list has many", () => {
+        const res = listHelper.mostLikes(blogs);
+        expect(res).toEqual({ author: "Edsger W. Dijkstra", likes: 17 });
+    });
+
+});

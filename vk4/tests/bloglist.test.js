@@ -94,3 +94,16 @@ describe("favorite", () => {
 
 });
 
+describe("most active blogger", () => {
+
+    test("list has one blog", () => {
+        const result = listHelper.mostBlogs(listWithOneBlog);
+        expect(result).toEqual({ author: "Edsger W. Dijkstra", blogs: 1 });
+    });
+
+    test("list with many blogs", () => {
+        const res = listHelper.mostBlogs(blogs);
+        expect(res).toEqual({ author: "Robert C. Martin", blogs: 3 });
+    });
+
+});

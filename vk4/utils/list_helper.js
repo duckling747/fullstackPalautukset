@@ -14,6 +14,21 @@ const favoriteBlog = blogs => {
     );
 };
 
+const mostBlogs = blogs => {
+    let writersCounts = {};
+    blogs.forEach(blog => {
+        writersCounts[blog.author] = (writersCounts[blog.author] || 0) + 1;
+    });
+    const winner = blogs
+        .reduce(
+            (prev, current) => 
+                writersCounts[prev.author] > writersCounts[current.author]
+                    ? prev
+                    : current
+        );
+    return { author: winner.author, blogs: writersCounts[winner.author] };
+};
+
 module.exports = {
-    dummy, totalLikes, favoriteBlog
+    dummy, totalLikes, favoriteBlog, mostBlogs
 };

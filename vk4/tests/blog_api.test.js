@@ -11,8 +11,6 @@ const blogs = testHelper.blogs;
 
 beforeEach(async () => {
     await Blog.deleteMany({});
-    // for (const element of blogs)
-    //    await new Blog(element).save();
     await Blog.insertMany(blogs);
 });
 
@@ -68,6 +66,21 @@ test("removing by id works", async() => {
         .expect(204);
     const retBlogs = await testHelper.blogsInDb();
     expect(retBlogs).toHaveLength(blogs.length - 1);
+});
+
+test("can update likes using PUT", async() => {
+    const newLikes = 99999999;
+    const updateMe = { ...blogs[0], likes: newLikes};
+    const blogsAtStart = await testHelper.blogsInDb();
+    const origBlog = blogsAtStart.find(b => b.id === updateMe._id);
+    expect(origBlog.likes).toBe(blogs[0].likes);
+    await api
+        .put(`/api/blogs/${updateMe._id}`)
+        .send(updateMe)
+        .expect(200);
+    const retBlogs = await testHelper.blogsInDb();
+    const updated = retBlogs.find(b => b.id === updateMe._id);
+    expect(updated.likes).toBe(newLikes);
 });
 
 afterAll(() => {

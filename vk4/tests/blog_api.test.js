@@ -11,8 +11,9 @@ const blogs = testHelper.blogs;
 
 beforeEach(async () => {
     await Blog.deleteMany({});
-    for (const element of blogs)
-        await new Blog(element).save();
+    // for (const element of blogs)
+    //    await new Blog(element).save();
+    await Blog.insertMany(blogs);
 });
 
 
@@ -35,23 +36,30 @@ test("identifier field is named \"id\" and not \"_id\"", async () => {
 });
 
 test("POST increases blog count by one and adds correct stuff", async() => {
-    const newBlog = { 
-        _id: "5a422ba71b54a676234d17f0", 
-        title: "Binary B-Trees for Virtual Memory", 
-        author: "Rudolf Bayer", 
-        url: "https://dl.acm.org/doi/10.1145/1734714.1734731",
-        likes: 1000, 
-        __v: 0 
-    };
-    await api
-        .post("/api/blogs")
-        .send(newBlog)
+    await testHelper.sendMe(testHelper.newBlog, api)
         .expect(201)
         .expect("Content-Type", /application\/json/);
-    const blogs = await testHelper.blogsInDb();
-    expect(blogs).toHaveLength(testHelper.blogs.length + 1);
-    const contents = blogs.map(b => b.title);
+    const retBlogs = await testHelper.blogsInDb();
+    expect(retBlogs).toHaveLength(blogs.length + 1);
+    const contents = retBlogs.map(b => b.title);
     expect(contents).toContain("Binary B-Trees for Virtual Memory");
+});
+
+test("Uninitialized likes-field gets default value 0", async() => {
+    let newBlog = { ...testHelper.newBlog };
+    delete newBlog.likes;
+    await testHelper.sendMe(newBlog, api);
+    const blogs = await testHelper.blogsInDb();
+    const addedBlog = blogs.find(b => b.id === newBlog._id);
+    expect(addedBlog).toHaveProperty("likes", 0);
+});
+
+test("if no title and no url, then respond with status 400", async() => {
+    let newBlog = { ...testHelper.newBlog };
+    delete newBlog.url;
+    delete newBlog.title;
+    await testHelper.sendMe(newBlog, api)
+        .expect(400);
 });
 
 afterAll(() => {

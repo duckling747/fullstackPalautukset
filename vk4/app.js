@@ -8,6 +8,8 @@ const middleware = require("./utils/middleware");
 const mongoose = require("mongoose");
 const logger = require("./utils/logger");
 
+mongoose.set("useFindAndModify", false);
+mongoose.set("useCreateIndex", true);
 
 mongoose
     .connect(config.MONGODB_URI,

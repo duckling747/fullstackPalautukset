@@ -62,6 +62,14 @@ test("if no title and no url, then respond with status 400", async() => {
         .expect(400);
 });
 
+test("removing by id works", async() => {
+    await api
+        .delete("/api/blogs/5a422ba71b54a676234d17fb")
+        .expect(204);
+    const retBlogs = await testHelper.blogsInDb();
+    expect(retBlogs).toHaveLength(blogs.length - 1);
+});
+
 afterAll(() => {
     mongoose.connection.close();
 });

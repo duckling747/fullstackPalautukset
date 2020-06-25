@@ -2,58 +2,12 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
 const Blog = require("../models/blog");
+const testHelper = require("./test_helper");
 
 const api = supertest(app);
 
-const blogs = [
-    {
-        _id: "5a422a851b54a676234d17f7", 
-        title: "React patterns", 
-        author: "Michael Chan", 
-        url: "https://reactpatterns.com/", 
-        likes: 7, 
-        __v: 0 
-    }, 
-    { 
-        _id: "5a422aa71b54a676234d17f8", 
-        title: "Go To Statement Considered Harmful", 
-        author: "Edsger W. Dijkstra", 
-        url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html", 
-        likes: 5, 
-        __v: 0 
-    }, 
-    { 
-        _id: "5a422b3a1b54a676234d17f9", 
-        title: "Canonical string reduction", 
-        author: "Edsger W. Dijkstra", 
-        url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html", 
-        likes: 12, __v: 0 
-    }, 
-    { 
-        _id: "5a422b891b54a676234d17fa", 
-        title: "First class tests", 
-        author: "Robert C. Martin", 
-        url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll", 
-        likes: 10, 
-        __v: 0 
-    }, 
-    { 
-        _id: "5a422ba71b54a676234d17fb", 
-        title: "TDD harms architecture", 
-        author: "Robert C. Martin", 
-        url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-        likes: 0, 
-        __v: 0 
-    }, 
-    { 
-        _id: "5a422bc61b54a676234d17fc", 
-        title: "Type wars", 
-        author: "Robert C. Martin", 
-        url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html", 
-        likes: 2, 
-        __v: 0 
-    }
-];
+const blogs = testHelper.blogs;
+
 
 beforeEach(async () => {
     await Blog.deleteMany({});
@@ -61,13 +15,43 @@ beforeEach(async () => {
         await new Blog(element).save();
 });
 
+
 test("GET returns json, correct statuscode and correct amount", async () => {
-    const res = 
-        await api
+    const res
+        = await api
             .get("/api/blogs")
             .expect(200)
             .expect("Content-Type", /application\/json/);
     expect(res.body).toHaveLength(blogs.length);
+});
+
+test("identifier field is named \"id\" and not \"_id\"", async () => {
+    const blogs = await testHelper.blogsInDb();
+    for (const element of blogs) {
+        expect(element).toBeDefined();
+        expect(element).toHaveProperty("id");
+        expect(element).not.toHaveProperty("_id");
+    }
+});
+
+test("POST increases blog count by one and adds correct stuff", async() => {
+    const newBlog = { 
+        _id: "5a422ba71b54a676234d17f0", 
+        title: "Binary B-Trees for Virtual Memory", 
+        author: "Rudolf Bayer", 
+        url: "https://dl.acm.org/doi/10.1145/1734714.1734731",
+        likes: 1000, 
+        __v: 0 
+    };
+    await api
+        .post("/api/blogs")
+        .send(newBlog)
+        .expect(201)
+        .expect("Content-Type", /application\/json/);
+    const blogs = await testHelper.blogsInDb();
+    expect(blogs).toHaveLength(testHelper.blogs.length + 1);
+    const contents = blogs.map(b => b.title);
+    expect(contents).toContain("Binary B-Trees for Virtual Memory");
 });
 
 afterAll(() => {

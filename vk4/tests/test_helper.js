@@ -1,4 +1,5 @@
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 
 
@@ -78,6 +79,11 @@ const blogsInDb = async () => {
     return blogs.map(blog => blog.toJSON());
 };
 
+const usersInDb = async () => {
+    const users = await User.find({});
+    return users.map(user => user.toJSON())
+};
+
 const sendMe = (newBlog, api) => {
     return api
         .post("/api/blogs")
@@ -85,5 +91,5 @@ const sendMe = (newBlog, api) => {
 };
 
 module.exports = {
-    blogs, listWithOneBlog, newBlog, blogsInDb, sendMe
+    blogs, listWithOneBlog, newBlog, blogsInDb, sendMe, usersInDb
 };

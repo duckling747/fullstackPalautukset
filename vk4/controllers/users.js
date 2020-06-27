@@ -5,6 +5,10 @@ const User = require("../models/user");
 
 usersRouter.post("/", async (req, res) => {
     const body = req.body;
+    if (!body.password || body.password.length < 3)
+        return res.status(400)
+            .json({ error: "Password too short or missing!" });
+
     const saltRounds = 12;
     const passwordHash = await bcrypt.hash(body.password, saltRounds);
 
@@ -16,7 +20,7 @@ usersRouter.post("/", async (req, res) => {
 
     const savedUser = await user.save();
 
-    res.json(savedUser);
+    res.status(201).json(savedUser);
 });
 
 usersRouter.get("/", async (req, res) => {

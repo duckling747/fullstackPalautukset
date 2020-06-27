@@ -27,11 +27,11 @@ describe("GET request", () => {
     
     test("identifier field is named \"id\" and not \"_id\"", async () => {
         const blogs = await testHelper.blogsInDb();
-        for (const element of blogs) {
-            expect(element).toBeDefined();
-            expect(element).toHaveProperty("id");
-            expect(element).not.toHaveProperty("_id");
-        }
+        blogs.forEach(b => {
+            expect(b).toBeDefined();
+            expect(b).toHaveProperty("id");
+            expect(b).not.toHaveProperty("_id");
+        });
     });
 
 });

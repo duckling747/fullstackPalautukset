@@ -2,7 +2,6 @@ const Blog = require("../models/blog");
 const User = require("../models/user");
 
 
-
 const listWithOneBlog = [
     {
         id: "5a422aa71b54a676234d17f8",
@@ -81,7 +80,7 @@ const blogsInDb = async () => {
 
 const usersInDb = async () => {
     const users = await User.find({});
-    return users.map(user => user.toJSON())
+    return users.map(user => user.toJSON());
 };
 
 const sendMe = (newBlog, api) => {
@@ -90,6 +89,12 @@ const sendMe = (newBlog, api) => {
         .send(newBlog);
 };
 
+const createUser = (user, api) => {
+    return api
+        .post("/api/users")
+        .send(user);
+};
+
 module.exports = {
-    blogs, listWithOneBlog, newBlog, blogsInDb, sendMe, usersInDb
+    blogs, listWithOneBlog, newBlog, blogsInDb, sendMe, usersInDb, createUser
 };

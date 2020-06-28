@@ -96,6 +96,6 @@ const createUser = (user, api) => {
 };
 
 module.exports = {
-    blogs, listWithOneBlog, newBlog, newBlogNoLikes,
+    blogs, listWithOneBlog, newBlog,
     blogsInDb, sendMe, usersInDb, createUser
 };

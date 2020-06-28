@@ -24,8 +24,8 @@ usersRouter.post("/", async (req, res) => {
 });
 
 usersRouter.get("/", async (req, res) => {
-    const users = await User.find({});
-    res.json(users);
+    const users = await User.find({}).populate("blogs");
+    res.json(users.map (u => u.toJSON()));
 });
 
 module.exports = usersRouter;

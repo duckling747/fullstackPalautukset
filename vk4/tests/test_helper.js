@@ -73,6 +73,14 @@ const newBlog = {
     __v: 0 
 };
 
+const newBlogNoLikes = { 
+    _id: "5a422ba71b54a676234d17f0", 
+    title: "Binary B-Trees for Virtual Memory", 
+    author: "Rudolf Bayer", 
+    url: "https://dl.acm.org/doi/10.1145/1734714.1734731",
+    __v: 0 
+};
+
 const blogsInDb = async () => {
     const blogs = await Blog.find({});
     return blogs.map(blog => blog.toJSON());
@@ -96,5 +104,6 @@ const createUser = (user, api) => {
 };
 
 module.exports = {
-    blogs, listWithOneBlog, newBlog, blogsInDb, sendMe, usersInDb, createUser
+    blogs, listWithOneBlog, newBlog, newBlogNoLikes,
+    blogsInDb, sendMe, usersInDb, createUser
 };

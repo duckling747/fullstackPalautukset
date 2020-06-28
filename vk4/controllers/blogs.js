@@ -47,7 +47,7 @@ blogsRouter.delete("/:id", async (request, response) => {
         return response.status(401)
             .json({ error: "this is not the authenticated user's blog" });
 
-    await Blog.remove(blog);
+    await Blog.deleteOne(blog);
 
     response.status(204).end();
 });

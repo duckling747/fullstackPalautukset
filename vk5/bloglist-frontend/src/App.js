@@ -5,7 +5,7 @@ import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 
-const loggedInKey = 'loggedBloglistUser'
+export const loggedInKey = 'loggedBloglistUser'
 
 const messageClasses = {
   ERROR: 'error',
@@ -42,7 +42,6 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('logging in with', username, password)
     try {
       const user = await loginService.login({
         username, password

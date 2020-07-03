@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import blogs from '../services/blogs'
-
+import { loggedInKey } from '../App'
 
 const Blog = ({ blog }) => {
 
@@ -20,6 +20,23 @@ const Blog = ({ blog }) => {
     await blogs.update(newBlog.id, newBlog)
   }
 
+  const removeBlog = async () => {
+    if (!window.confirm('Really remove?')) return
+    const res = await blogs.remove(blog.id)
+    console.log(res)
+  }
+
+  const isLoggedUsersBlog = () => {
+    const loggedUserJSON = window.localStorage.getItem(loggedInKey)
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      if (blog.user && blog.user.username === user.username) return true
+    }
+    return false
+  }
+
+  const isUsersBlogStyle = {display: isLoggedUsersBlog() ? '' : 'none'}
+
   return (
   <>
     <div style={blogStyle}>
@@ -33,7 +50,10 @@ const Blog = ({ blog }) => {
         : ''
       }
       {' '}
-      <button onClick={ () => setDetailed(false) }>hide</button>
+      <button onClick={ () => setDetailed(false) }>hide</button> <br></br>
+      <button style={isUsersBlogStyle} onClick={removeBlog}>
+        remove
+      </button>
     </div>
     <div style={ {...blogStyle, display: detailed ? 'none' : ''} }>
       {blog.title}; {blog.author} {' '}

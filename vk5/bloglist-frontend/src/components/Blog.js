@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import blogs from '../services/blogs'
 
 
 
 const Blog = ({ blog }) => {
 
   const [detailed, setDetailed] = useState(false)
+  const [likes, setLikes] = useState(blog.likes)
 
   const blogStyle = {
     paddingTop: 10,
@@ -15,8 +17,12 @@ const Blog = ({ blog }) => {
     display: detailed ? '' : 'none'
   }
 
-  const sendLike = () => {
-    console.log('like sent...')
+  const sendLike = async (blog) => {
+    // const res = 
+    await blogs.update(blog.id, 
+      { ...blog, likes: blog.likes+1, user: blog.user.id })
+    // console.log(res)
+    setLikes(blog.likes+1)
   }
 
   return (
@@ -24,8 +30,8 @@ const Blog = ({ blog }) => {
     <div style={blogStyle}>
       {blog.title}; {blog.author} <br></br>
       {blog.url} <br></br>
-      likes: {blog.likes} {' '}
-      <button onClick={ () => sendLike() }>like</button> <br></br>
+      likes: {likes} {' '}
+      <button onClick={ () => sendLike(blog) }>like</button> <br></br>
       {
         blog.user
         ? `${blog.user.username} (${blog.user.name})`

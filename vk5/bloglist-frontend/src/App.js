@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import BlogForm from './components/BlogForm'
 
 const loggedInKey = 'loggedBloglistUser'
 
@@ -21,6 +22,7 @@ const App = () => {
   const [url, setUrl] = useState('')
   const [message, setMessage] = useState(null)
   const [messageClass, setMessageClass] = useState(messageClasses.NOTIFICATION)
+  const [createBlogVisible, setCreateBlogVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -109,7 +111,7 @@ const App = () => {
         </form>
       </div>
     )
-
+  
   return (
     <div>
       <h1>blogs</h1>
@@ -118,27 +120,11 @@ const App = () => {
         {user.name} ({user.username}) logged in {' '}
         <button onClick={handleLogout}>log out</button>
       </div>
-      <div>
-        <h2>create new</h2>
-        <form onSubmit={handleCreateNewBlog}>
-          <div>
-            title:{' '}
-            <input type='text' value={title} name='Title' 
-            onChange={ ({ target }) => setTitle(target.value) } />
-          </div>
-          <div>
-            author:{' '}
-            <input type='text' value={author} name='Author' 
-            onChange={ ({ target }) => setAuthor(target.value) } />  
-          </div>
-          <div>
-            url:{' '}
-            <input type='text' value={url} name='Url' 
-            onChange={ ({ target }) => setUrl(target.value) } />
-          </div>
-          <button type='submit'>create</button>
-        </form>
-      </div>
+      <BlogForm handleCreateNewBlog={handleCreateNewBlog}
+        author={author} title={title} url={url}
+        setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl}
+        createBlogVisible={createBlogVisible}
+        setCreateBlogVisible={setCreateBlogVisible} />
       <h2>Bloglist</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />

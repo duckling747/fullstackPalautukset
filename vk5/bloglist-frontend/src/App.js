@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
+import BlogList from './components/BlogList'
 
 const loggedInKey = 'loggedBloglistUser'
 
@@ -125,10 +125,7 @@ const App = () => {
         setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl}
         createBlogVisible={createBlogVisible}
         setCreateBlogVisible={setCreateBlogVisible} />
-      <h2>Bloglist</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+        <BlogList blogs={blogs} />
     </div>
   )
 }

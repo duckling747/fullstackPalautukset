@@ -1,17 +1,26 @@
-import React from 'react'
+import React, { useState, useImperativeHandle } from 'react'
 
 const BlogForm = 
-({ handleCreateNewBlog, title, author, url, 
-    setTitle, setAuthor, setUrl, 
-    createBlogVisible, setCreateBlogVisible }) => {
+React.forwardRef(({ handleCreateNewBlog, title, author, url, 
+    setTitle, setAuthor, setUrl }, ref) => {
+
+    const [createBlogVisible, setCreateBlogVisible] = useState(false)
 
     const hideWhenVisible = { display: createBlogVisible ? 'none' : ''}
     const showWhenVisible = { display: createBlogVisible ? '' : 'none' }
+
+    const toggleVisible = () => {
+        setCreateBlogVisible(!createBlogVisible)
+    }
+
+    useImperativeHandle(ref, () => {
+        return toggleVisible
+    })
     
     return (
     <>
         <div style={hideWhenVisible}>
-            <button onClick={ () => setCreateBlogVisible(true) }>
+            <button onClick={ toggleVisible }>
                 create new blog
             </button>
         </div>
@@ -35,12 +44,13 @@ const BlogForm =
                 </div>
                     <button type='submit'>create</button>
             </form>
-            <button onClick={ () => setCreateBlogVisible(false) }>
+            <button onClick={ toggleVisible }>
                 cancel
             </button>
         </div>
     </>
     )
 }
+)
 
 export default BlogForm

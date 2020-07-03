@@ -15,13 +15,17 @@ const Blog = ({ blog }) => {
     display: detailed ? '' : 'none'
   }
 
+  const sendLike = () => {
+    console.log('like sent...')
+  }
 
   return (
   <>
     <div style={blogStyle}>
       {blog.title}; {blog.author} <br></br>
       {blog.url} <br></br>
-      likes: {blog.likes} {' '} <button>like</button> <br></br>
+      likes: {blog.likes} {' '}
+      <button onClick={ () => sendLike() }>like</button> <br></br>
       {
         blog.user
         ? `${blog.user.username} (${blog.user.name})`
@@ -34,7 +38,8 @@ const Blog = ({ blog }) => {
       {blog.title}; {blog.author} {' '}
       <button onClick={ () => setDetailed(true) }>view</button>
     </div>
-  </>)
+  </>
+  )
 }
 
 export default Blog

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
@@ -22,7 +22,8 @@ const App = () => {
   const [url, setUrl] = useState('')
   const [message, setMessage] = useState(null)
   const [messageClass, setMessageClass] = useState(messageClasses.NOTIFICATION)
-  const [createBlogVisible, setCreateBlogVisible] = useState(false)
+
+  const createBlogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -82,6 +83,7 @@ const App = () => {
     console.log(response)
     const newBlogs = await blogService.getAll();
     setBlogs(newBlogs)
+    createBlogFormRef.current.toggleVisibility()
     setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added!`)
     setMessageClass(messageClasses.NOTIFICATION)
     setTimeout(() => {
@@ -122,9 +124,7 @@ const App = () => {
       </div>
       <BlogForm handleCreateNewBlog={handleCreateNewBlog}
         author={author} title={title} url={url}
-        setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl}
-        createBlogVisible={createBlogVisible}
-        setCreateBlogVisible={setCreateBlogVisible} />
+        setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl} />
         <BlogList blogs={blogs} />
     </div>
   )

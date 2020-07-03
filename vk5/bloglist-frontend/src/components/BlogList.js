@@ -2,10 +2,10 @@ import React from 'react'
 import Blog from './Blog'
 
 const comparator = (a, b) => {
-    return -(a.likes - b.likes)
+    return b.likes - a.likes
 }
 
-const BlogList = ({ blogs }) => {
+const BlogList = ({ blogs }) => {    
     return (
     <>
         <h2>Bloglist</h2>

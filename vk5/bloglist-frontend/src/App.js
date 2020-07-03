@@ -79,11 +79,13 @@ const App = () => {
   const handleCreateNewBlog = async (event) => {
     event.preventDefault()
     const newBlog = { author, title, url }
-    const response = await blogService.create(newBlog)
-    console.log(response)
+    // const response = 
+    await blogService.create(newBlog)
+    // console.log(response)
     const newBlogs = await blogService.getAll();
     setBlogs(newBlogs)
-    createBlogFormRef.current.toggleVisibility()
+    // console.log(createBlogFormRef.current.toggleVisible)
+    createBlogFormRef.current.toggleVisible()
     setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added!`)
     setMessageClass(messageClasses.NOTIFICATION)
     setTimeout(() => {
@@ -124,8 +126,9 @@ const App = () => {
       </div>
       <BlogForm handleCreateNewBlog={handleCreateNewBlog}
         author={author} title={title} url={url}
-        setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl} />
-        <BlogList blogs={blogs} />
+        setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl}
+        ref={createBlogFormRef}  />
+      <BlogList blogs={blogs} />
     </div>
   )
 }

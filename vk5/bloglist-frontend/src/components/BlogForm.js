@@ -1,7 +1,7 @@
 import React, { useState, useImperativeHandle } from 'react'
 
-const BlogForm = 
-React.forwardRef(({ handleCreateNewBlog, title, author, url, 
+const BlogForm = React.forwardRef(
+    ({ handleCreateNewBlog, title, author, url, 
     setTitle, setAuthor, setUrl }, ref) => {
 
     const [createBlogVisible, setCreateBlogVisible] = useState(false)
@@ -14,7 +14,9 @@ React.forwardRef(({ handleCreateNewBlog, title, author, url,
     }
 
     useImperativeHandle(ref, () => {
-        return toggleVisible
+        return {
+            toggleVisible
+        }
     })
     
     return (
@@ -50,7 +52,6 @@ React.forwardRef(({ handleCreateNewBlog, title, author, url,
         </div>
     </>
     )
-}
-)
+})
 
 export default BlogForm

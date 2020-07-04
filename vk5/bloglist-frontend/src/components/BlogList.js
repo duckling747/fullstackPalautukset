@@ -1,5 +1,6 @@
 import React from 'react'
 import Blog from './Blog'
+import PropTypes from 'prop-types'
 
 const comparator = (a, b) => {
     return b.likes - a.likes
@@ -16,6 +17,10 @@ const BlogList = ({ blogs }) => {
         )}
     </>
     )
+}
+
+BlogList.propTypes = {
+    blogs: PropTypes.array.isRequired
 }
 
 export default BlogList

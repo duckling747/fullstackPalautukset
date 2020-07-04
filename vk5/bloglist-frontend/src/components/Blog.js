@@ -40,7 +40,7 @@ const Blog = ({ blog }) => {
 
   return (
     <>
-      <div style={blogStyle}>
+      <div style={blogStyle} className="togglableContent">
         {blog.title}; {blog.author} <br></br>
         {blog.url} <br></br>
       likes: {blog.likes} {" "}
@@ -56,7 +56,8 @@ const Blog = ({ blog }) => {
         remove
         </button>
       </div>
-      <div style={ { ...blogStyle, display: detailed ? "none" : "" } }>
+      <div style={ { ...blogStyle, display: detailed ? "none" : "" } }
+        className="defaultContent">
         {blog.title}; {blog.author} {" "}
         <button onClick={ () => setDetailed(true) }>view</button>
       </div>

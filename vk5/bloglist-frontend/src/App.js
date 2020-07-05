@@ -78,12 +78,9 @@ const App = () => {
   const handleCreateNewBlog = async (event) => {
     event.preventDefault();
     const newBlog = { author, title, url };
-    // const response =
     await blogService.create(newBlog);
-    // console.log(response)
     const newBlogs = await blogService.getAll();
     setBlogs(newBlogs);
-    // console.log(createBlogFormRef.current.toggleVisible)
     createBlogFormRef.current.toggleVisible();
     setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added!`);
     setMessageClass(messageClasses.NOTIFICATION);

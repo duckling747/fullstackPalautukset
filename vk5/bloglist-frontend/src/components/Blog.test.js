@@ -62,12 +62,5 @@ test("like button pressed twice -> event handler called twice", () => {
   fireEvent.click(button);
   fireEvent.click(button);
 
-  //expect(mockHandler.mock.calls).toHaveLength(2);
   expect(mockFunc).toHaveBeenCalledTimes(2);
-
 });
-
-
-
-
-

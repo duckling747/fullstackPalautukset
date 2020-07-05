@@ -3,7 +3,7 @@ import blogs from "../services/blogs";
 import { loggedInKey } from "../App";
 import PropTypes from "prop-types";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, sendLikeHandlerProp }) => {
 
   const [detailed, setDetailed] = useState(false);
 
@@ -36,6 +36,10 @@ const Blog = ({ blog }) => {
     return false;
   };
 
+  const toggleDetailed = () => {
+    setDetailed(!detailed);
+  };
+
   const isUsersBlogStyle = { display: isLoggedUsersBlog() ? "" : "none" };
 
   return (
@@ -44,14 +48,16 @@ const Blog = ({ blog }) => {
         {blog.title}; {blog.author} <br></br>
         {blog.url} <br></br>
       likes: {blog.likes} {" "}
-        <button onClick={ () => sendLike() }>like</button> <br></br>
+        <button onClick={ sendLikeHandlerProp || sendLike }>
+          like
+        </button> <br></br>
         {
           blog.user
             ? `${blog.user.username} (${blog.user.name})`
             : ""
         }
         {" "}
-        <button onClick={ () => setDetailed(false) }>hide</button> <br></br>
+        <button onClick={ toggleDetailed }>hide</button> <br></br>
         <button style={isUsersBlogStyle} onClick={removeBlog}>
         remove
         </button>
@@ -59,14 +65,15 @@ const Blog = ({ blog }) => {
       <div style={ { ...blogStyle, display: detailed ? "none" : "" } }
         className="defaultContent">
         {blog.title}; {blog.author} {" "}
-        <button onClick={ () => setDetailed(true) }>view</button>
+        <button onClick={ toggleDetailed }>view</button>
       </div>
     </>
   );
 };
 
 Blog.propTypes = {
-  blog: PropTypes.object.isRequired
+  blog: PropTypes.object.isRequired,
+  sendLikeHandlerProp: PropTypes.func
 };
 
 export default Blog;

@@ -100,7 +100,7 @@ describe("Blog app", function() {
               blogs.push(parseInt(tempsubstr));
             });
           cy.wrap(blogs)
-            .should("equal", blogs.sort());
+            .should("equal", blogs.sort(function(a,b) { return b - a; }));
           cy.log(blogs);
         });
 

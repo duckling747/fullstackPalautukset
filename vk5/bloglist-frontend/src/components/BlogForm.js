@@ -45,7 +45,7 @@ const BlogForm = React.forwardRef(
               <input id="url" type='text' value={url} name='Url'
                 onChange={ ({ target }) => setUrl(target.value) } />
             </div>
-            <button type='submit'>create</button>
+            <button id="createbutton" type='submit'>create</button>
           </form>
           <button onClick={ toggleVisible }>
             cancel

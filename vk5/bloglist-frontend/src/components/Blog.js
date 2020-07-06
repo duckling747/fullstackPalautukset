@@ -43,12 +43,12 @@ const Blog = ({ blog, sendLikeHandlerProp }) => {
   const isUsersBlogStyle = { display: isLoggedUsersBlog() ? "" : "none" };
 
   return (
-    <>
+    <div id="blog">
       <div style={blogStyle} className="togglableContent">
         {blog.title}; {blog.author} <br></br>
         {blog.url} <br></br>
       likes: {blog.likes} {" "}
-        <button onClick={ sendLikeHandlerProp || sendLike }>
+        <button id="likebutton" onClick={ sendLikeHandlerProp || sendLike }>
           like
         </button> <br></br>
         {
@@ -57,17 +57,17 @@ const Blog = ({ blog, sendLikeHandlerProp }) => {
             : ""
         }
         {" "}
-        <button onClick={ toggleDetailed }>hide</button> <br></br>
-        <button style={isUsersBlogStyle} onClick={removeBlog}>
+        <button id="hidebutton" onClick={ toggleDetailed }>hide</button> <br></br>
+        <button id="removebutton" style={isUsersBlogStyle} onClick={removeBlog}>
         remove
         </button>
       </div>
       <div style={ { ...blogStyle, display: detailed ? "none" : "" } }
         className="defaultContent">
         {blog.title}; {blog.author} {" "}
-        <button onClick={ toggleDetailed }>view</button>
+        <button id="viewbutton" onClick={ toggleDetailed }>view</button>
       </div>
-    </>
+    </div>
   );
 };
 

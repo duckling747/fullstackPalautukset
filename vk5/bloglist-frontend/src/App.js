@@ -96,18 +96,18 @@ const App = () => {
         <Notification message={message} className={messageClass}/>
         <form onSubmit={handleLogin}>
           <div>
-            username <input type='text'
+            username <input id="input_uname" type='text'
               value={username}
               name='Username'
               onChange={ ({ target }) => setUsername(target.value)} />
           </div>
           <div>
-            password <input type='password'
+            password <input id="input_pw" type='password'
               value={password}
               name='Password'
               onChange={ ({ target }) => setPassword(target.value)} />
           </div>
-          <button type='submit'>login</button>
+          <button id="login_button" type='submit'>login</button>
         </form>
       </div>
     );
@@ -118,7 +118,7 @@ const App = () => {
       <Notification message={message} className={messageClass} />
       <div>
         {user.name} ({user.username}) logged in {" "}
-        <button onClick={handleLogout}>log out</button>
+        <button id="logoutbutton" onClick={handleLogout}>log out</button>
       </div>
       <BlogForm handleCreateNewBlog={handleCreateNewBlog}
         author={author} title={title} url={url}

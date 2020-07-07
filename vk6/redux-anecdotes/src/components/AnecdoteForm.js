@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { addAnecdote } from '../reducers/anecdoteReducer'
+import { showNote } from '../reducers/noteReducer'
 
 
 const AnecdoteForm = () => {
@@ -10,6 +11,10 @@ const AnecdoteForm = () => {
         event.preventDefault()
         const anecdote = event.target.anecdote.value
         dispatch(addAnecdote(anecdote))
+        dispatch(showNote(`CREATED: ${anecdote}`))
+        setTimeout(() => {
+          dispatch(showNote(''))
+        }, 5000);
     }
 
     return(

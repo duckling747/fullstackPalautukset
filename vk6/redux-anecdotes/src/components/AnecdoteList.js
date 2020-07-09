@@ -11,7 +11,7 @@ const AnecdoteList = () => {
     const filter = useSelector(state => state.filter)
   
     const handleVote = (anecdote) => {
-      console.log('vote', anecdote)
+      // console.log('vote', anecdote)
       dispatch(addVote(anecdote))
       dispatch(showNote(`VOTED: ${anecdote.content}`))
       setTimeout(() => {

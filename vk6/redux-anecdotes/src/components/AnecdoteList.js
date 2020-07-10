@@ -13,10 +13,7 @@ const AnecdoteList = () => {
     const handleVote = (anecdote) => {
       // console.log('vote', anecdote)
       dispatch(addVote(anecdote))
-      dispatch(showNote(`VOTED: ${anecdote.content}`))
-      setTimeout(() => {
-        dispatch(showNote(''))
-      }, 5000);
+      dispatch(showNote(`VOTED: ${anecdote.content}`, 5))
     }
   
     return (

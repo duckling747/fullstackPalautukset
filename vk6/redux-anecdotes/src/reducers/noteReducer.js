@@ -1,5 +1,5 @@
 
-
+let lastTimeout = null
 
 export const showNote = (note, timeout) => {
   return async dispatch => {
@@ -9,14 +9,16 @@ export const showNote = (note, timeout) => {
         text: note
       }
     })
-    setTimeout(() => {
+    if (lastTimeout) clearTimeout(lastTimeout)
+    lastTimeout = setTimeout(() => {
       dispatch({
         type: 'SHOW_NOTE',
         data: {
           text: ''
         }
       })
-    }, timeout * 1000);// timeout in seconds
+      lastTimeout = null
+    }, timeout * 1000) // timeout in seconds
   }
 }
 

@@ -4,6 +4,7 @@ import Menu from './components/Menu'
 import About from './components/About'
 import CreateNew from './components/CreateNew'
 import Footer from './components/Footer'
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 
 
 const App = () => {
@@ -48,11 +49,21 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu />
-      <AnecdoteList anecdotes={anecdotes} />
-      <About />
-      <CreateNew addNew={addNew} />
-      <Footer />
+      <Router>
+        <Menu />
+        <Switch>
+          <Route path='/about'>
+            <About />
+          </Route>
+          <Route path='/create'>
+            <CreateNew addNew={addNew} />
+          </Route>
+          <Route path='/'>
+            <AnecdoteList anecdotes={anecdotes} />
+          </Route>
+        </Switch>
+        <Footer />
+      </Router>
     </div>
   )
 }

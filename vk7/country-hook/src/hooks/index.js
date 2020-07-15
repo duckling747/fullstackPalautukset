@@ -42,4 +42,3 @@ export  const useCountry = (name) => {
     
     return country
 }
-  

@@ -4,10 +4,12 @@ import loginService from "./services/login";
 import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
+import { useDispatch } from "react-redux";
+import { showNote } from "./reducers/noteReducer";
 
 export const loggedInKey = "loggedBloglistUser";
 
-const messageClasses = {
+export const messageClasses = {
   ERROR: "error",
   NOTIFICATION: "notification"
 };
@@ -20,16 +22,16 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
-  const [message, setMessage] = useState(null);
-  const [messageClass, setMessageClass] = useState(messageClasses.NOTIFICATION);
 
   const createBlogFormRef = useRef();
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs)
     );
-  }, [blogs]);
+  }, []);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem(loggedInKey);
@@ -39,6 +41,7 @@ const App = () => {
       blogService.setToken(user.token);
     }
   }, []);
+
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -54,13 +57,7 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      // console.error('wrong credentials')
-      setMessage("wrong credentials");
-      setMessageClass(messageClasses.ERROR);
-      setTimeout(() => {
-        setMessage(null);
-      }, 3000);
-
+      dispatch(showNote("wrong credentials", messageClasses.ERROR, 3));
     }
   };
 
@@ -68,11 +65,7 @@ const App = () => {
     window.localStorage.removeItem(loggedInKey);
     blogService.setToken(null);
     setUser(null);
-    setMessage("logged out");
-    setMessageClass(messageClasses.NOTIFICATION);
-    setTimeout(() => {
-      setMessage(null);
-    }, 3000);
+    dispatch(showNote("logged out", messageClasses.NOTIFICATION, 3));
   };
 
   const handleCreateNewBlog = async (event) => {
@@ -82,18 +75,16 @@ const App = () => {
     const newBlogs = await blogService.getAll();
     setBlogs(newBlogs);
     createBlogFormRef.current.toggleVisible();
-    setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added!`);
-    setMessageClass(messageClasses.NOTIFICATION);
-    setTimeout(() => {
-      setMessage(null);
-    }, 3000);
+    dispatch(
+      showNote(`a new blog ${newBlog.title} by ${newBlog.author} added!`,
+        messageClasses.NOTIFICATION, 3));
   };
 
   if (user === null)
     return (
       <div>
         <h2>Log in to application</h2>
-        <Notification message={message} className={messageClass}/>
+        <Notification />
         <form onSubmit={handleLogin}>
           <div>
             username <input id="input_uname" type='text'
@@ -115,7 +106,7 @@ const App = () => {
   return (
     <div>
       <h1>blogs</h1>
-      <Notification message={message} className={messageClass} />
+      <Notification />
       <div>
         {user.name} ({user.username}) logged in {" "}
         <button id="logoutbutton" onClick={handleLogout}>log out</button>
@@ -124,7 +115,7 @@ const App = () => {
         author={author} title={title} url={url}
         setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl}
         ref={createBlogFormRef}  />
-      <BlogList blogs={blogs} />
+      <BlogList blogs={blogs} setBlogs={setBlogs} />
     </div>
   );
 };

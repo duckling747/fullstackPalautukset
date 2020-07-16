@@ -3,7 +3,7 @@ import blogs from "../services/blogs";
 import { loggedInKey } from "../App";
 import PropTypes from "prop-types";
 
-const Blog = ({ blog, sendLikeHandlerProp }) => {
+const Blog = ({ blog, sendLikeHandlerProp, bloglist, setBlogs }) => {
 
   const [detailed, setDetailed] = useState(false);
 
@@ -19,12 +19,14 @@ const Blog = ({ blog, sendLikeHandlerProp }) => {
   const sendLike = async () => {
     const newBlog = { ...blog, likes: blog.likes+1, user: blog.user.id };
     await blogs.update(newBlog.id, newBlog);
+    const blogsNow = await blogs.getAll();
+    setBlogs(blogsNow);
   };
 
   const removeBlog = async () => {
     if (!window.confirm("Really remove?")) return;
-    const res = await blogs.remove(blog.id);
-    console.log(res);
+    await blogs.remove(blog.id);
+    setBlogs(bloglist.filter(b => b !== blog));
   };
 
   const isLoggedUsersBlog = () => {

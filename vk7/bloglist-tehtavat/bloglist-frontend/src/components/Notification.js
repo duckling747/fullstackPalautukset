@@ -1,19 +1,49 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { messageClasses } from "../App";
 
-const Notification = ({ message, className }) => {
-  if (message === null) return null;
+const Notification = () => {
+
+  const notification = useSelector(state => state.notes);
+
+  // console.log(notification);
+
+  let style;
+  switch (notification.messageclass) {
+  case messageClasses.NOTIFICATION:
+    style = {
+      color: "green",
+      background: "white",
+      fontSize: "20px",
+      borderStyle: "solid",
+      borderRadius: "5px",
+      padding: "10px",
+      marginBottom: "10px",
+      display: notification.text === "" ? "none" : ""
+    };
+    break;
+  case messageClasses.ERROR:
+    style = {
+      color: "red",
+      background: "lightgrey",
+      fontSize: "20px",
+      borderStyle: "solid",
+      borderRadius: "5px",
+      padding: "10px",
+      marginBottom: "10px",
+      display: notification.text === "" ? "none" : ""
+    };
+    break;
+  default:
+    break;
+  }
 
   return (
-    <div className={className}>
-      {message}
+    <div style={style}>
+      {notification.text}
     </div>
   );
 };
 
-Notification.propTypes = {
-  message: PropTypes.string,
-  className: PropTypes.string
-};
 
 export default Notification;

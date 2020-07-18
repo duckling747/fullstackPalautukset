@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import blogs from "../services/blogs";
 import { loggedInKey } from "../App";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { initializeBlogs } from "../reducers/blogsReducer";
 
-const Blog = ({ blog, sendLikeHandlerProp, bloglist, setBlogs }) => {
+const Blog = ({ blog, sendLikeHandlerProp }) => {
 
   const [detailed, setDetailed] = useState(false);
+
+  const dispatch = useDispatch();
 
   const blogStyle = {
     paddingTop: 10,
@@ -19,14 +23,16 @@ const Blog = ({ blog, sendLikeHandlerProp, bloglist, setBlogs }) => {
   const sendLike = async () => {
     const newBlog = { ...blog, likes: blog.likes+1, user: blog.user.id };
     await blogs.update(newBlog.id, newBlog);
-    const blogsNow = await blogs.getAll();
-    setBlogs(blogsNow);
+    dispatch(initializeBlogs());
   };
 
   const removeBlog = async () => {
     if (!window.confirm("Really remove?")) return;
-    await blogs.remove(blog.id);
-    setBlogs(bloglist.filter(b => b !== blog));
+    //await blogs.remove(blog.id);
+    //setBlogs(bloglist.filter(b => b !== blog));
+    /*
+    * TODO: use dispatch and redux for removing blog
+    */
   };
 
   const isLoggedUsersBlog = () => {

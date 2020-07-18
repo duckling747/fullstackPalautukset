@@ -6,6 +6,7 @@ import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
 import { useDispatch } from "react-redux";
 import { showNote } from "./reducers/noteReducer";
+import { initializeBlogs, addBlog } from "./reducers/blogsReducer";
 
 export const loggedInKey = "loggedBloglistUser";
 
@@ -15,7 +16,7 @@ export const messageClasses = {
 };
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  //const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -28,10 +29,8 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    );
-  }, []);
+    dispatch(initializeBlogs());
+  }, [dispatch]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem(loggedInKey);
@@ -71,9 +70,7 @@ const App = () => {
   const handleCreateNewBlog = async (event) => {
     event.preventDefault();
     const newBlog = { author, title, url };
-    await blogService.create(newBlog);
-    const newBlogs = await blogService.getAll();
-    setBlogs(newBlogs);
+    dispatch(addBlog(newBlog));
     createBlogFormRef.current.toggleVisible();
     dispatch(
       showNote(`a new blog ${newBlog.title} by ${newBlog.author} added!`,
@@ -115,7 +112,7 @@ const App = () => {
         author={author} title={title} url={url}
         setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl}
         ref={createBlogFormRef}  />
-      <BlogList blogs={blogs} setBlogs={setBlogs} />
+      <BlogList />
     </div>
   );
 };

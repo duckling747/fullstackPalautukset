@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showNote } from "./reducers/noteReducer";
 import { initializeBlogs, addBlog } from "./reducers/blogsReducer";
+import { setUser } from "./reducers/userReducer";
 
 export const loggedInKey = "loggedBloglistUser";
 
@@ -18,7 +18,6 @@ export const messageClasses = {
 const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -26,6 +25,7 @@ const App = () => {
   const createBlogFormRef = useRef();
 
   const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
 
   useEffect(() => {
     dispatch(initializeBlogs());
@@ -35,10 +35,9 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem(loggedInKey);
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      dispatch(setUser(user));
     }
-  }, []);
+  }, [dispatch]);
 
 
   const handleLogin = async (event) => {
@@ -50,8 +49,7 @@ const App = () => {
       window.localStorage.setItem(
         loggedInKey, JSON.stringify(user)
       );
-      blogService.setToken(user.token);
-      setUser(user);
+      dispatch(setUser(user));
       setUsername("");
       setPassword("");
     } catch (exception) {
@@ -61,12 +59,11 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem(loggedInKey);
-    blogService.setToken(null);
-    setUser(null);
+    dispatch(setUser(null));
     dispatch(showNote("logged out", messageClasses.NOTIFICATION, 3));
   };
 
-  const handleCreateNewBlog = async (event) => {
+  const handleCreateNewBlog = event => {
     event.preventDefault();
     const newBlog = { author, title, url };
     dispatch(addBlog(newBlog));

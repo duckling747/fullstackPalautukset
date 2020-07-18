@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import blogs from "../services/blogs";
 import { loggedInKey } from "../App";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { initializeBlogs } from "../reducers/blogsReducer";
+import { deleteBlog, likeBlog } from "../reducers/blogsReducer";
 
 const Blog = ({ blog, sendLikeHandlerProp }) => {
 
@@ -20,19 +19,13 @@ const Blog = ({ blog, sendLikeHandlerProp }) => {
     display: detailed ? "" : "none"
   };
 
-  const sendLike = async () => {
-    const newBlog = { ...blog, likes: blog.likes+1, user: blog.user.id };
-    await blogs.update(newBlog.id, newBlog);
-    dispatch(initializeBlogs());
+  const sendLike = () => {
+    dispatch(likeBlog(blog));
   };
 
-  const removeBlog = async () => {
+  const removeBlog = () => {
     if (!window.confirm("Really remove?")) return;
-    //await blogs.remove(blog.id);
-    //setBlogs(bloglist.filter(b => b !== blog));
-    /*
-    * TODO: use dispatch and redux for removing blog
-    */
+    dispatch(deleteBlog(blog.id));
   };
 
   const isLoggedUsersBlog = () => {

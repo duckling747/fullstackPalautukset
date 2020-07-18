@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { showNote } from "./reducers/noteReducer";
 import { initializeBlogs, addBlog } from "./reducers/blogsReducer";
 import { setUser } from "./reducers/userReducer";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import Users from "./components/Users";
 
 export const loggedInKey = "loggedBloglistUser";
 
@@ -97,19 +99,28 @@ const App = () => {
     );
 
   return (
-    <div>
-      <h1>blogs</h1>
-      <Notification />
+    <Router>
       <div>
-        {user.name} ({user.username}) logged in {" "}
-        <button id="logoutbutton" onClick={handleLogout}>log out</button>
+        <h1>blogs</h1>
+        <Notification />
+        <div>
+          {user.name} ({user.username}) logged in {" "}
+          <button id="logoutbutton" onClick={handleLogout}>log out</button>
+        </div>
+        <Switch>
+          <Route path="/users">
+            <Users />
+          </Route>
+          <Route path="/">
+            <BlogForm handleCreateNewBlog={handleCreateNewBlog}
+              author={author} title={title} url={url}
+              setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl}
+              ref={createBlogFormRef}  />
+            <BlogList />
+          </Route>
+        </Switch>
       </div>
-      <BlogForm handleCreateNewBlog={handleCreateNewBlog}
-        author={author} title={title} url={url}
-        setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl}
-        ref={createBlogFormRef}  />
-      <BlogList />
-    </div>
+    </Router>
   );
 };
 

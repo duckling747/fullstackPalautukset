@@ -35,12 +35,29 @@ export const deleteBlog = (id) => {
   };
 };
 
+export const commentBlog = (id, comment) => {
+  return async dispatch => {
+    await blogsService.comment(id, comment);
+    dispatch({
+      type: "COMMENT_BLOG",
+      data: {
+        id, comment
+      }
+    });
+  };
+};
+
 const blogReducer = (state = [], action) => {
   switch (action.type) {
   case "INIT_BLOGLIST":
     return action.data;
   case "REMOVE_BLOG":
     return state.filter(b => b.id !== action.data);
+  case "COMMENT_BLOG":
+    return state.map(b => b.id !== action.data.id
+      ? b
+      : { ...b, comments: b.comments.concat(action.data.comment) }
+    );
   default:
     return state;
   }

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { likeBlog, deleteBlog } from "../reducers/blogsReducer";
 import { showNote } from "../reducers/noteReducer";
 import { messageClasses, loggedInKey } from "../App";
+import Comments from "./Comments";
 
 const BlogDetails = () => {
 
@@ -49,6 +50,7 @@ const BlogDetails = () => {
       </p>
       <p>added by {blog.user.name}</p>
       <button style={buttonStyle} onClick={removeHandler}>remove</button>
+      <Comments comments={blog.comments} id={blog.id} />
     </>
   );
 };

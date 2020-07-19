@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { commentBlog } from "../reducers/blogsReducer";
+import { Button, Form, Table } from "react-bootstrap";
 
 const Comments = ({ comments, id }) => {
 
@@ -11,13 +12,21 @@ const Comments = ({ comments, id }) => {
 
   if (!comments) return null;
 
+  const commentStyle = {
+    fontFamily: "courierNew",
+    fontSize: 13,
+    marginTop: 20
+  };
+
   const content = !comments.length
-    ? <p>no comments yet...</p>
-    : <ul>
-      {comments.map((comment, i) =>
-        <li key={i}>{comment}</li>
-      )}
-    </ul>;
+    ? <p style={commentStyle}>no comments yet...</p>
+    : <Table responsive style={commentStyle}>
+      <tbody>
+        {comments.map((comment, i) =>
+          <tr key={i}><td>{comment}</td></tr>
+        )}
+      </tbody>
+    </Table>;
 
 
   const inputChangeHandler = ({ target }) => {
@@ -34,10 +43,16 @@ const Comments = ({ comments, id }) => {
   return(
     <>
       <h3>comments</h3>
-      <form onSubmit={submitHandler}>
-        <input value={inputfield} onChange={inputChangeHandler} />
-        <button type="submit">add comment</button>
-      </form>
+      <Form  style={{ textAlign: "left" }} onSubmit={submitHandler}>
+        <Form.Control
+          type="text"
+          name="comment"
+          onChange={inputChangeHandler}
+          value={inputfield}
+          placeholder="write your comment here..."
+        />
+        <Button type="submit">add comment</Button>
+      </Form>
       {content}
     </>
   );

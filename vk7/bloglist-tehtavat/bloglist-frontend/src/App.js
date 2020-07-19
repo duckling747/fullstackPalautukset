@@ -12,6 +12,7 @@ import Users from "./components/UserList";
 import UserDetails from "./components/UserDetails";
 import { initializeUsers } from "./reducers/userlistReducer";
 import BlogDetails from "./components/BlogDetails";
+import { Button, Form, Navbar, Nav } from "react-bootstrap";
 
 export const loggedInKey = "loggedBloglistUser";
 
@@ -83,46 +84,72 @@ const App = () => {
         messageClasses.NOTIFICATION, 3));
   };
 
-  const navbarStyle = {
-    backgroundColor: "lightgrey"
-  };
-
-  const linkStyle = {
-    padding: 5
+  const mainDivStyle = {
+    opacity: 0.9,
+    backgroundSize: "cover",
+    fontFamily: "serif",
+    textAlign: "center"
   };
 
   if (user === null)
     return (
-      <div>
+      <div className="container" style={mainDivStyle}>
         <h2>Log in to application</h2>
         <Notification />
-        <form onSubmit={handleLogin}>
-          <div>
-            username <input id="input_uname" type='text'
-              value={username}
-              name='Username'
-              onChange={ ({ target }) => setUsername(target.value)} />
-          </div>
-          <div>
-            password <input id="input_pw" type='password'
-              value={password}
-              name='Password'
-              onChange={ ({ target }) => setPassword(target.value)} />
-          </div>
-          <button id="login_button" type='submit'>login</button>
-        </form>
+        <Form onSubmit={handleLogin} style={{ textAlign: "left" }}>
+          <Form.Group>
+            <Form.Label>
+              username:
+            </Form.Label>
+            <Form.Control
+              id="input_uname"
+              type="text"
+              name="Username"
+              onChange={ ({ target }) => setUsername(target.value)}
+            />
+            <Form.Label>
+              password:
+            </Form.Label>
+            <Form.Control
+              id="input_pw"
+              type="password"
+              name="Password"
+              onChange={ ({ target }) => setPassword(target.value)}
+            />
+            <Button id="login_button" type='submit'>login</Button>
+          </Form.Group>
+        </Form>
       </div>
     );
 
+  const headerStyle = {
+    fontSize: 80,
+    color: "dodgerBlue",
+    margin: "auto",
+  };
+
   return (
-    <div>
-      <div style={navbarStyle}>
-        <Link style={linkStyle} to="/">blogs</Link>
-        <Link style={linkStyle} to="/users">users</Link>
-        {user.name} ({user.username}) logged in {" "}
-        <button id="logoutbutton" onClick={handleLogout}>log out</button>
-      </div>
-      <h1>blogs</h1>
+    <div className="container" style={mainDivStyle}>
+      <Navbar collapseOnSelect expand="lg" bg="light">
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="navclass">
+            <Nav.Link href="#" as="span">
+              <Link to="/">blogs</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <Link to="/users">users</Link>
+            </Nav.Link>
+            <Navbar.Text>
+              {user.name} ({user.username}) logged in
+            </Navbar.Text>
+          </Nav>
+          <Button style={{ marginLeft: 10 }} id="logoutbutton" onClick={handleLogout}>
+              log out
+          </Button>
+        </Navbar.Collapse>
+      </Navbar>
+      <h1 style={headerStyle}>~~~~ Blogs ~~~~</h1>
       <Notification />
       <Switch>
         <Route path="/blogs/:id">
@@ -136,7 +163,6 @@ const App = () => {
         </Route>
         <Route path="/">
           <BlogForm handleCreateNewBlog={handleCreateNewBlog}
-            author={author} title={title} url={url}
             setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl}
             ref={createBlogFormRef}  />
           <BlogList />

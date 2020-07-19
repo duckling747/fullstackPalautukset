@@ -5,6 +5,7 @@ import { likeBlog, deleteBlog } from "../reducers/blogsReducer";
 import { showNote } from "../reducers/noteReducer";
 import { messageClasses, loggedInKey } from "../App";
 import Comments from "./Comments";
+import { Button } from "react-bootstrap";
 
 const BlogDetails = () => {
 
@@ -31,7 +32,10 @@ const BlogDetails = () => {
     return false;
   };
 
-  const buttonStyle = { display: isUsersBlog() ? "" : "none" };
+  const buttonStyle = {
+    display: isUsersBlog() ? "" : "none",
+    marginLeft: 5
+  };
 
   const removeHandler = () => {
     if (!window.confirm("really remove?")) return;
@@ -43,13 +47,19 @@ const BlogDetails = () => {
 
   return (
     <>
-      <h2>{blog.title}</h2>
-      <a href={blog.url}>{blog.url}</a>
-      <p>
-        {blog.likes} likes <button onClick={likeHandler}>like</button>
-      </p>
-      <p>added by {blog.user.name}</p>
-      <button style={buttonStyle} onClick={removeHandler}>remove</button>
+      <div style={{ borderStyle: "dotted" }}>
+        <h2 style={{ marginTop: 10 }}>{blog.title}</h2>
+        <p>
+          <a href={blog.url}>{blog.url}</a>
+        </p>
+        <p>
+          {blog.likes} likes <Button onClick={likeHandler}>like</Button>
+        </p>
+        <p>
+            added by {blog.user.name}
+          <Button style={buttonStyle} onClick={removeHandler}>remove</Button>
+        </p>
+      </div>
       <Comments comments={blog.comments} id={blog.id} />
     </>
   );

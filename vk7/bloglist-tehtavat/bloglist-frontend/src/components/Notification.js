@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { messageClasses } from "../App";
+import { Alert } from "react-bootstrap";
 
 const Notification = () => {
 
@@ -8,40 +9,25 @@ const Notification = () => {
 
   // console.log(notification);
 
-  let style;
+  const style = {
+    display: notification.text === "" ? "none" : ""
+  };
+  let variant;
   switch (notification.messageclass) {
   case messageClasses.NOTIFICATION:
-    style = {
-      color: "green",
-      background: "white",
-      fontSize: "20px",
-      borderStyle: "solid",
-      borderRadius: "5px",
-      padding: "10px",
-      marginBottom: "10px",
-      display: notification.text === "" ? "none" : ""
-    };
+    variant = "success";
     break;
   case messageClasses.ERROR:
-    style = {
-      color: "red",
-      background: "lightgrey",
-      fontSize: "20px",
-      borderStyle: "solid",
-      borderRadius: "5px",
-      padding: "10px",
-      marginBottom: "10px",
-      display: notification.text === "" ? "none" : ""
-    };
+    variant = "danger";
     break;
   default:
     break;
   }
 
   return (
-    <div style={style}>
+    <Alert variant={variant} style={style}>
       {notification.text}
-    </div>
+    </Alert>
   );
 };
 

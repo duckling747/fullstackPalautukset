@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { Table } from "react-bootstrap";
 
 
 const UserList = () => {
@@ -14,7 +15,7 @@ const UserList = () => {
   return(
     <>
       <h2>Users</h2>
-      <table style={style}>
+      <Table style={style}>
         <thead>
           <tr>
             <th>user</th>
@@ -35,7 +36,7 @@ const UserList = () => {
               </tr>
             )}
         </tbody>
-      </table>
+      </Table>
     </>
   );
 };

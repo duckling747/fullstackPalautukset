@@ -1,9 +1,9 @@
 import React, { useState, useImperativeHandle } from "react";
 import PropTypes from "prop-types";
+import { Form, Button } from "react-bootstrap";
 
 const BlogForm = React.forwardRef(
-  ({ handleCreateNewBlog, title, author, url,
-    setTitle, setAuthor, setUrl }, ref) => {
+  ({ handleCreateNewBlog, setTitle, setAuthor, setUrl }, ref) => {
 
     const [createBlogVisible, setCreateBlogVisible] = useState(false);
 
@@ -23,33 +23,41 @@ const BlogForm = React.forwardRef(
     return (
       <>
         <div style={hideWhenVisible}>
-          <button id="visibilityButton" onClick={ toggleVisible }>
+          <Button id="visibilityButton" onClick={ toggleVisible }>
             create new blog
-          </button>
+          </Button>
         </div>
         <div style={showWhenVisible}>
           <h2>create new blog</h2>
-          <form onSubmit={handleCreateNewBlog}>
-            <div>
-            title:{" "}
-              <input id="title" type='text' value={title} name='Title'
-                onChange={ ({ target }) => setTitle(target.value) } />
-            </div>
-            <div>
-            author:{" "}
-              <input id="author" type='text' value={author} name='Author'
-                onChange={ ({ target }) => setAuthor(target.value) } />
-            </div>
-            <div>
-            url:{" "}
-              <input id="url" type='text' value={url} name='Url'
-                onChange={ ({ target }) => setUrl(target.value) } />
-            </div>
-            <button id="createbutton" type='submit'>create</button>
-          </form>
-          <button onClick={ toggleVisible }>
-            cancel
-          </button>
+          <Form condensed="true" onSubmit={handleCreateNewBlog}>
+            <Form.Group>
+              <Form.Label>title:</Form.Label>
+              <Form.Control
+                type="text"
+                name="title"
+                onChange={(event) => setTitle(event.target.value)}
+              />
+              <Form.Label>author:</Form.Label>
+              <Form.Control
+                type="text"
+                name="author"
+                onChange={(event) => setAuthor(event.target.value)}
+              />
+              <Form.Label>url:</Form.Label>
+              <Form.Control
+                type="text"
+                name="url"
+                onChange={(event) => setUrl(event.target.value)}
+              />
+              <Button variant="primary" type="submit">
+                create
+              </Button>
+              <Button style={{ marginLeft: 5 }}
+                type="button" onClick={ toggleVisible }>
+                cancel
+              </Button>
+            </Form.Group>
+          </Form>
         </div>
       </>
     );
@@ -59,9 +67,6 @@ BlogForm.displayName = "BlogForm";
 
 BlogForm.propTypes = {
   handleCreateNewBlog: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
   setTitle: PropTypes.func.isRequired,
   setAuthor: PropTypes.func.isRequired,
   setUrl: PropTypes.func.isRequired

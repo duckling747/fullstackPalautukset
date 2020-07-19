@@ -5,10 +5,12 @@ import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
 import { useDispatch, useSelector } from "react-redux";
 import { showNote } from "./reducers/noteReducer";
-import { initializeBlogs, addBlog } from "./reducers/blogsReducer";
+import { addBlog, initializeBlogs } from "./reducers/blogsReducer";
 import { setUser } from "./reducers/userReducer";
-import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
-import Users from "./components/Users";
+import { Route, Switch } from "react-router-dom";
+import Users from "./components/UserList";
+import UserDetails from "./components/UserDetails";
+import { initializeUsers } from "./reducers/userlistReducer";
 
 export const loggedInKey = "loggedBloglistUser";
 
@@ -29,9 +31,6 @@ const App = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
 
-  useEffect(() => {
-    dispatch(initializeBlogs());
-  }, [dispatch]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem(loggedInKey);
@@ -39,6 +38,14 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON);
       dispatch(setUser(user));
     }
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(initializeUsers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(initializeBlogs());
   }, [dispatch]);
 
 
@@ -99,28 +106,29 @@ const App = () => {
     );
 
   return (
-    <Router>
+    <div>
+      <h1>blogs</h1>
+      <Notification />
       <div>
-        <h1>blogs</h1>
-        <Notification />
-        <div>
-          {user.name} ({user.username}) logged in {" "}
-          <button id="logoutbutton" onClick={handleLogout}>log out</button>
-        </div>
-        <Switch>
-          <Route path="/users">
-            <Users />
-          </Route>
-          <Route path="/">
-            <BlogForm handleCreateNewBlog={handleCreateNewBlog}
-              author={author} title={title} url={url}
-              setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl}
-              ref={createBlogFormRef}  />
-            <BlogList />
-          </Route>
-        </Switch>
+        {user.name} ({user.username}) logged in {" "}
+        <button id="logoutbutton" onClick={handleLogout}>log out</button>
       </div>
-    </Router>
+      <Switch>
+        <Route path="/users/:id">
+          <UserDetails />
+        </Route>
+        <Route path="/users">
+          <Users />
+        </Route>
+        <Route path="/">
+          <BlogForm handleCreateNewBlog={handleCreateNewBlog}
+            author={author} title={title} url={url}
+            setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl}
+            ref={createBlogFormRef}  />
+          <BlogList />
+        </Route>
+      </Switch>
+    </div>
   );
 };
 

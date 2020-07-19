@@ -10,6 +10,7 @@ const BlogList = () => {
 
   const blogs = useSelector(state => state.blogs);
 
+  if (!blogs) return null;
   return (
     <div id="bloglist">
       <h2>Bloglist</h2>

@@ -4,7 +4,7 @@ export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogsService.getAll();
     dispatch({
-      type: "INIT",
+      type: "INIT_BLOGLIST",
       data: blogs
     });
   };
@@ -29,7 +29,7 @@ export const deleteBlog = (id) => {
   return async dispatch => {
     await blogsService.remove(id);
     dispatch({
-      type: "REMOVE",
+      type: "REMOVE_BLOG",
       data: id
     });
   };
@@ -37,9 +37,9 @@ export const deleteBlog = (id) => {
 
 const blogReducer = (state = [], action) => {
   switch (action.type) {
-  case "INIT":
+  case "INIT_BLOGLIST":
     return action.data;
-  case "REMOVE":
+  case "REMOVE_BLOG":
     return state.filter(b => b.id !== action.data);
   default:
     return state;

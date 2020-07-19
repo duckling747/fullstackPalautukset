@@ -1,15 +1,9 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { initializeUsers } from "../reducers/userlistReducer";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 
-const Users = () => {
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(initializeUsers());
-  }, [dispatch]);
+const UserList = () => {
 
   const users = useSelector(state => state.userlist);
 
@@ -32,7 +26,11 @@ const Users = () => {
             .filter(u => u.username)
             .map(u =>
               <tr key={u.id}>
-                <td>{u.username}</td>
+                <td>
+                  <Link to={`/users/${u.id}`}>
+                    {u.username}
+                  </Link>
+                </td>
                 <td>{u.blogs.length}</td>
               </tr>
             )}
@@ -42,4 +40,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default UserList;

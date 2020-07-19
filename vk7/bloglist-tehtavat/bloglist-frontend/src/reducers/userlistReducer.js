@@ -4,7 +4,7 @@ export const initializeUsers = () => {
   return async dispatch => {
     const users = await usersService.getAll();
     dispatch({
-      type: "INIT",
+      type: "INIT_USERLIST",
       data: users
     });
   };
@@ -12,7 +12,7 @@ export const initializeUsers = () => {
 
 const userlistReducer = (state = [], action) => {
   switch(action.type) {
-  case "INIT":
+  case "INIT_USERLIST":
     return action.data;
   default:
     return state;

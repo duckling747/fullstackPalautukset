@@ -11,6 +11,7 @@ import { Route, Switch } from "react-router-dom";
 import Users from "./components/UserList";
 import UserDetails from "./components/UserDetails";
 import { initializeUsers } from "./reducers/userlistReducer";
+import BlogDetails from "./components/BlogDetails";
 
 export const loggedInKey = "loggedBloglistUser";
 
@@ -114,6 +115,9 @@ const App = () => {
         <button id="logoutbutton" onClick={handleLogout}>log out</button>
       </div>
       <Switch>
+        <Route path="/blogs/:id">
+          <BlogDetails />
+        </Route>
         <Route path="/users/:id">
           <UserDetails />
         </Route>

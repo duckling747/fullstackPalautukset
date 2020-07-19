@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { showNote } from "./reducers/noteReducer";
 import { addBlog, initializeBlogs } from "./reducers/blogsReducer";
 import { setUser } from "./reducers/userReducer";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Link } from "react-router-dom";
 import Users from "./components/UserList";
 import UserDetails from "./components/UserDetails";
 import { initializeUsers } from "./reducers/userlistReducer";
@@ -83,6 +83,14 @@ const App = () => {
         messageClasses.NOTIFICATION, 3));
   };
 
+  const navbarStyle = {
+    backgroundColor: "lightgrey"
+  };
+
+  const linkStyle = {
+    padding: 5
+  };
+
   if (user === null)
     return (
       <div>
@@ -108,12 +116,14 @@ const App = () => {
 
   return (
     <div>
-      <h1>blogs</h1>
-      <Notification />
-      <div>
+      <div style={navbarStyle}>
+        <Link style={linkStyle} to="/">blogs</Link>
+        <Link style={linkStyle} to="/users">users</Link>
         {user.name} ({user.username}) logged in {" "}
         <button id="logoutbutton" onClick={handleLogout}>log out</button>
       </div>
+      <h1>blogs</h1>
+      <Notification />
       <Switch>
         <Route path="/blogs/:id">
           <BlogDetails />

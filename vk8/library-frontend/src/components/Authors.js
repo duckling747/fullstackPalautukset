@@ -64,8 +64,8 @@ const Authors = (props) => {
         <select value={name || authors[0].name} onChange={e => setName(e.target.value)}>
           {
             authors
-              .map(a =>
-                <option value={a.name}>{a.name}</option>
+              .map((a, i) =>
+                <option key={i} value={a.name}>{a.name}</option>
             )
           }
         </select>

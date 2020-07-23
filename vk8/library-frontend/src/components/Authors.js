@@ -28,7 +28,7 @@ const Authors = (props) => {
     event.preventDefault()
 
     const bb = parseInt(born)
-    editAuthor({ variables: { name, born: bb } })
+    editAuthor({ variables: { name: name || authors[0].name, born: bb } })
 
 
     setName('')
@@ -61,7 +61,7 @@ const Authors = (props) => {
       <h3>Set birthyear</h3>
       <form onSubmit={nameUpdateFormHandler}>
         {`name: `}
-        <select value={name} onChange={e => setName(e.target.value)}>
+        <select value={name || authors[0].name} onChange={e => setName(e.target.value)}>
           {
             authors
               .map(a =>

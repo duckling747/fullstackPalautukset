@@ -8,7 +8,7 @@
     "dev": "NODE_ENV=development nodemon library-backend.js"
   },
   "author": "Arttu",
-  "license": "ISC",
+  "license": "",
   "dependencies": {
     "apollo-server": "^2.16.0",
     "graphql": "^15.3.0"

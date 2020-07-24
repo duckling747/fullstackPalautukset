@@ -1,0 +1,102 @@
+query countbook {
+  bookCount
+}
+
+query countauth {authorCount}
+
+mutation addb {
+  addBook (title: "avavavav", author: "Arnie Switch",
+    published: 1908, genres: ["funny"]) {
+    title
+    published
+  }
+}
+
+query getbooks {
+  allBooks {
+    title
+    genres
+    published
+    id
+    author {
+      name
+      born
+    }
+  }
+}
+
+query getauthors {
+  allAuthors {
+    name
+    id
+    born
+    bookCount
+  }
+}
+
+mutation changeborn {
+  editAuthor (name: "Arnie Switch", setBornTo: 1111)
+  {
+    name
+    born
+  }
+}
+
+query getbooksparam1 {
+  allBooks (genre: "funny") {
+    title
+    genres
+    published
+    id
+    author {
+      name
+      born
+    }
+  }
+}
+
+query getbooksparam2 {
+  allBooks (author: "Jack Holop") {
+    title
+    genres
+    published
+    id
+    author {
+      name
+      born
+    }
+  }
+}
+
+query getbooksparam3 {
+  allBooks (genre: "funny", author: "Arnie Switch") {
+    title
+    genres
+    published
+    id
+    author {
+      name
+      born
+    }
+  }
+}
+
+mutation createJac {
+  createUser(username: "Martin", favoriteGenre: "Funny") {
+    username
+    favoriteGenre
+  }
+}
+
+mutation logg {
+  login(username: "Martin", password: "salaisuus") {
+    value
+  }
+}
+
+query meq {
+  me {
+    username
+  }
+}
+

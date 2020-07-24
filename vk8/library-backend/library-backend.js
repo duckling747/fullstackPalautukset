@@ -13,7 +13,8 @@ console.log('connecting to', MONGODB_URI)
 
 
 mongoose.connect(MONGODB_URI,
-  { useNewUrlParser: true,
+  {
+    useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false
@@ -69,34 +70,48 @@ const resolvers = {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      return Book.find({})
-      /*if (args.author)
-        bArr = bArr.filter(b => b.author.name === args.author)
+      let filter = {}
       if (args.genre)
-        bArr = bArr.filter(b => b.genres.includes(args.genre))
-      return bArr*/
+        filter['genres'] = { $in: args.genre }
+
+        const temp = await Book.find(filter)
+          .populate('author')
+
+      if (!args.author) return temp
+
+      return temp.filter(b => b.toObject().author.name === args.author)
     },
     allAuthors: () => Author.find({})
   },
   Author: {
-    bookCount: (root) => {
-      return Book.collection.countDocuments({ author: root })
+    bookCount: async (root) => {
+      const books = await Book
+        .find({})
+        .populate('author')
+      const sum = books
+        .map(mongooseThingy => mongooseThingy.toObject())
+        .reduce((sum, book) => 
+        {
+          return book.author.name === root.name
+          ? sum+1
+          : sum
+        }, 0)
+      return sum
     }
   },
   Mutation: {
     addBook: async (root, args) => {
-      let author = await Author.find({ name: args.author })
+      let author = await Author.findOne({ name: args.author })
       if (!author) {
-        author = new Author({ name: args.author, born: null })
-        author = await author.save()
-        console.log(author)
+          author = new Author({ name: args.author })
+          author = await author.save()
       }
       const book = new Book({ ...args, author: author.id })
       return book.save()
     },
     editAuthor: async (root, args) => {
       return Author.findOneAndUpdate(
-        { name: args.name }, { born: args.setBornTo })
+        { name: args.name }, { born: args.setBornTo }, { new: true })
     }
   }
 }

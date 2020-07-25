@@ -36,6 +36,27 @@ const Authors = (props) => {
     setBorn('')
   }
 
+  const birthyearForm = props.userToken !== null
+  ? <>
+    <h3>Set birthyear</h3>
+    <form onSubmit={nameUpdateFormHandler}>
+      {`name: `}
+      <select value={name} onChange={e => setName(e.target.value)}>
+        <option key={-1} value={''}>select name...</option>
+        {
+          authors
+            .map((a, i) =>
+              <option key={i} value={a.name}>{a.name}</option>
+          )
+        }
+      </select>
+      {` born: `}
+      <input value={born} onChange={e => setBorn(e.target.value)} />
+      <button type="submit">update author</button>
+    </form>
+  </>
+  : null
+
   return (
     <div>
       <h2>authors</h2>
@@ -59,22 +80,7 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <h3>Set birthyear</h3>
-      <form onSubmit={nameUpdateFormHandler}>
-        {`name: `}
-        <select value={name} onChange={e => setName(e.target.value)}>
-          <option key={-1} value={''}>select name...</option>
-          {
-            authors
-              .map((a, i) =>
-                <option key={i} value={a.name}>{a.name}</option>
-            )
-          }
-        </select>
-        {` born: `}
-        <input value={born} onChange={e => setBorn(e.target.value)} />
-        <button type="submit">update author</button>
-      </form>
+      {birthyearForm}
 
     </div>
   )

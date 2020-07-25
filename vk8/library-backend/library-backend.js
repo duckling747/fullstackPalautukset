@@ -126,7 +126,7 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args, context) => {
-      const currentUser = context
+      const currentUser = context.currentUser
       if (!currentUser) throw new AuthenticationError('not authenticated')
 
       let author = await Author.findOne({ name: args.author })
@@ -151,7 +151,7 @@ const resolvers = {
       return book
     },
     editAuthor: async (root, args, context) => {
-      const currentUser = context
+      const currentUser = context.currentUser
       if (!currentUser) throw new AuthenticationError('not authenticated')
 
       const author = await Author.findOne(
@@ -201,7 +201,7 @@ const server = new ApolloServer({
       )
       const currentUser = await User
         .findById(decodedToken.id)
-      return currentUser
+      return { currentUser }
     }
   }
 })

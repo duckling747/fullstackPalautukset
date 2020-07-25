@@ -22,6 +22,7 @@ const App = () => {
     setUserToken(null)
     localStorage.clear()
     client.resetStore()
+    setPage('books')
   }
 
   const loggedInButtons = userToken !== null

@@ -35,7 +35,6 @@ export const NEW_BOOK = gql`
     ) {
       title
       published
-      author
       genres
     }
   }

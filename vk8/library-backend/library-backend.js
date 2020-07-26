@@ -105,7 +105,7 @@ const resolvers = {
     },
     allAuthors: () => Author.find({}),
     me: (root, args, context) => {
-      return context
+      return context.currentUser
     }
   },
   Author: {

@@ -82,6 +82,7 @@ export const ME = gql`
   query meQuery {
     me {
       username
+      favoriteGenre
     }
   }
 `

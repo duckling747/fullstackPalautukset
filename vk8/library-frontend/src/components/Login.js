@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { useMutation } from '@apollo/client'
-import { LOGIN } from '../queries'
+import { useMutation, useLazyQuery } from '@apollo/client'
+import { LOGIN, ME } from '../queries'
 
 
 const Login = ({ show, setUserToken }) => {
@@ -8,9 +8,16 @@ const Login = ({ show, setUserToken }) => {
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
 
+    const [getMe] = useLazyQuery(ME, {
+        fetchPolicy: 'network-only'
+    })
+
     const [login, result] = useMutation(LOGIN, {
         onError: e => {
-            // TODO: error stuff
+            // error stuff
+        },
+        onCompleted: data => {
+            getMe()
         }
     })
 

@@ -5,11 +5,13 @@ import Booklist from './Booklist'
 
 const Recommend = (props) => {
 
-    const resultME = useQuery(ME)
 
-    const [getGenres, resultGenres] = useLazyQuery(GENRE_BOOKS, {
-        fetchPolicy: 'no-cache'
+    const [getGenres, resultGenres] = useLazyQuery(GENRE_BOOKS)
+
+    const resultME = useQuery(ME, {
+        fetchPolicy: 'cache-first'
     })
+
 
     useEffect(() => {
         if (!props.token) return

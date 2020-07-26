@@ -10,11 +10,7 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
 
-
-  const [ createBook ] = useMutation(NEW_BOOK, {
-    refetchQueries: [ { query: BOOKS }, { query: AUTHORS },
-      { query: GENRE_BOOKS, variables: { genre: '' } }]
-  })
+  const [ createBook ] = useMutation(NEW_BOOK)
 
   if (!props.show) {
     return null
@@ -25,7 +21,21 @@ const NewBook = (props) => {
     
     // console.log('add book...')
     const pub = parseInt(published)
-    createBook({ variables: { title, published: pub, author, genres } })
+    createBook({
+      variables: { title, published: pub, author, genres },
+      refetchQueries:
+      [
+        { query: BOOKS },
+        { query: AUTHORS },
+        { query: GENRE_BOOKS, variables: { genre: '' } }
+      ].concat(
+        genres.map(g => {
+          return(
+            { query: GENRE_BOOKS, variables: { genre: g } }
+          )
+        })
+      )
+    })
 
     setTitle('')
     setPublished('')

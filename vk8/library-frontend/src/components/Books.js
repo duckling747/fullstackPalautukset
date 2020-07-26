@@ -9,7 +9,9 @@ const Books = (props) => {
 
   const [genre, setGenre] = useState('')
 
-  const [loadBooks, result] = useLazyQuery(GENRE_BOOKS)
+  const [loadBooks, result] = useLazyQuery(GENRE_BOOKS, {
+    fetchPolicy: 'cache-and-network'
+  })
 
 
   useEffect(() => {

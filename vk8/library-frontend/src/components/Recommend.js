@@ -7,7 +7,9 @@ const Recommend = (props) => {
 
     const resultME = useQuery(ME)
 
-    const [getGenres, resultGenres] = useLazyQuery(GENRE_BOOKS)
+    const [getGenres, resultGenres] = useLazyQuery(GENRE_BOOKS, {
+        fetchPolicy: 'no-cache'
+    })
 
     useEffect(() => {
         if (!props.token) return

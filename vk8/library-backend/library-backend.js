@@ -113,25 +113,26 @@ const resolvers = {
 
       return temp.filter(b => b.toObject().author.name === args.author)
     },
-    allAuthors: () => Author.find({}),
+    allAuthors: async () => {
+      const books = await Book.find({})
+        .populate('author')
+      let tally = {}
+      for (b of books) {
+        if (tally[b.author.id]) continue
+        tally[b.author.id] = {
+          name: b.author.name,
+          born: b.author.born,
+          id: b.author.id
+        }
+      }
+      for (b of books) {
+        tally[b.author.id]['bookCount'] 
+          = (tally[b.author.id]['bookCount'] || 0) + 1
+      }
+      return Object.values(tally)
+    },
     me: (root, args, context) => {
       return context.currentUser
-    }
-  },
-  Author: {
-    bookCount: async (root) => {
-      const books = await Book
-        .find({})
-        .populate('author')
-      const sum = books
-        .map(mongooseThingy => mongooseThingy.toObject())
-        .reduce((sum, book) => 
-        {
-          return book.author.name === root.name
-          ? sum+1
-          : sum
-        }, 0)
-      return sum
     }
   },
   Mutation: {

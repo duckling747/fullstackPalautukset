@@ -106,8 +106,8 @@ const resolvers = {
       if (args.genre)
         filter['genres'] = { $in: args.genre }
 
-        const temp = await Book.find(filter)
-          .populate('author')
+      const temp = await Book.find(filter)
+        .populate('author')
 
       if (!args.author) return temp
 
@@ -142,23 +142,21 @@ const resolvers = {
       let author = await Author.findOne({ name: args.author })
       if (!author) {
           author = new Author({ name: args.author })
-          try {
-            author = await author.save()
-          } catch (e) {
-            throw new UserInputError(e.message, {
-              invalidArgs: args,
+          author = await author.save()
+            .catch(e => {
+              throw new UserInputError(e.message, {
+                invalidArgs: args,
+              })
             })
-          }
       }
-      const book = new Book({ ...args, author: author.id })
-      try {
-        await book.save()
-      } catch (e) {
-        throw new UserInputError(e.message, {
-          invalidArgs: args,
+      let book = new Book({ ...args, author: author.id })
+      await book.save()
+        .catch(e => {
+          throw new UserInputError(e.message, {
+            invalidArgs: args,
+          })
         })
-      }
-
+      book.author = author
       pubsub.publish('BOOK_ADDED', { bookAdded: book })
 
       return book
@@ -170,14 +168,12 @@ const resolvers = {
       const author = await Author.findOne(
         { name: args.name })
       author.born = args.setBornTo
-      try {
-        await author.save()
-      } catch (e) {
-        throw new UserInputError(e.message, {
-          invalidArgs: args,
+      return author.save()
+        .catch(e => {
+          throw new UserInputError(e.message, {
+            invalidArgs: args,
+          })
         })
-      }
-      return author
     },
     createUser: (root, args) => {
       const user = new User(

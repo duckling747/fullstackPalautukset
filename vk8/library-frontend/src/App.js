@@ -4,8 +4,9 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Login from './components/Login'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useSubscription } from '@apollo/client'
 import Recommend from './components/Recommend'
+import { BOOK_ADDED } from './queries'
 
 
 const App = () => {
@@ -18,6 +19,16 @@ const App = () => {
   useEffect(() => {
     setUserToken(window.localStorage.getItem('current-user-token'))
   }, [])
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const book = subscriptionData.data.bookAdded
+      window.alert(`new book added:\n\
+      author: ${book.author.name}\n\
+      title: ${book.title}\n\
+      published: ${book.published}`)
+    }
+  })
 
   const logoutHandler = () => {
     setUserToken(null)

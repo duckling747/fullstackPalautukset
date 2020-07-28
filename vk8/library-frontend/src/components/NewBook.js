@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { NEW_BOOK, BOOKS, AUTHORS, GENRE_BOOKS } from '../queries'
+import { NEW_BOOK } from '../queries'
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('')
@@ -23,18 +23,6 @@ const NewBook = (props) => {
     const pub = parseInt(published)
     createBook({
       variables: { title, published: pub, author, genres },
-      refetchQueries:
-      [
-        { query: BOOKS },
-        { query: AUTHORS },
-        { query: GENRE_BOOKS, variables: { genre: '' } }
-      ].concat(
-        genres.map(g => {
-          return(
-            { query: GENRE_BOOKS, variables: { genre: g } }
-          )
-        })
-      )
     })
 
     setTitle('')

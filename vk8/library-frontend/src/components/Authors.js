@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
-import { AUTHORS, EDIT_AUTHOR } from '../queries'
+import { AUTHORS, EDIT_AUTHOR, BOOK_ADDED } from '../queries'
 
 const Authors = (props) => {
 
@@ -12,6 +12,21 @@ const Authors = (props) => {
 
   const [ editAuthor ] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [ { query: AUTHORS }]
+  })
+
+  result.subscribeToMore({
+    document: BOOK_ADDED,
+    updateQuery: (prev, { subscriptionData }) => {
+      if (!subscriptionData.data || !prev) return prev
+      const origAuthors = prev.allAuthors
+      const bookAuthor
+        = subscriptionData.data.bookAdded.author
+      if (origAuthors.includes(bookAuthor)) return prev
+      return {
+        ...prev,
+        allAuthors: [ bookAuthor, ...prev.allAuthors ]
+      }
+    }
   })
 
 

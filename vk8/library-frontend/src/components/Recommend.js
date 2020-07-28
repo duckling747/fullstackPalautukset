@@ -1,36 +1,46 @@
-import React, { useEffect } from 'react'
-import { useQuery, useLazyQuery } from '@apollo/client'
-import { ME, GENRE_BOOKS } from '../queries'
+import React from 'react'
+import { useQuery } from '@apollo/client'
+import { ME, GENRE_BOOKS, BOOK_ADDED } from '../queries'
 import Booklist from './Booklist'
 
 const Recommend = (props) => {
 
 
-    const [getGenres, resultGenres] = useLazyQuery(GENRE_BOOKS)
-
     const resultME = useQuery(ME, {
         fetchPolicy: 'cache-first'
     })
 
+    const me = resultME?.data?.me
+    
+    const resultGenres = useQuery(GENRE_BOOKS, {
+        skip: !me,
+        variables: {
+            genre: me && me.favoriteGenre
+        },
+        fetchPolicy: 'no-cache'
+    })
 
-    useEffect(() => {
-        if (!props.token) return
-        resultME.refetch()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.token])
+    resultGenres.subscribeToMore({
+        document: BOOK_ADDED,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev
 
-    useEffect(() => {
-        if (!resultME.data || !resultME.data.me) return
-        getGenres({ variables: { genre: resultME.data.me.favoriteGenre } })
-    }, [resultME.data, getGenres])
+          const newBook
+            = subscriptionData.data.bookAdded
+          if (!me || !newBook.genres.includes(me.favoriteGenre))
+            return prev
 
+          return {
+            ...prev,
+            allBooks: [ newBook, ...prev.allBooks ]
+          }
+        }
+      })
 
     if (!props.show) return null
 
     if (resultME.loading || resultGenres.loading)
         return <>loading...</>
-
-    const user = resultME.data.me
 
     const books = resultGenres.data.allBooks
 
@@ -38,8 +48,8 @@ const Recommend = (props) => {
         <>
             <h2>recommendations</h2>
             {
-              `Greetings ${user.username}, \
-              here are books in your favorite genre, ${user.favoriteGenre}:`
+              `Greetings ${me.username}, \
+              here are books in your favorite genre, ${me.favoriteGenre}:`
             }
             <div>
               <Booklist books={books} />

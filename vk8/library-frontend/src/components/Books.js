@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery, useLazyQuery } from '@apollo/client'
-import { GENRES, GENRE_BOOKS } from '../queries'
+import { GENRES, GENRE_BOOKS, BOOK_ADDED } from '../queries'
 import Booklist from './Booklist'
 
 const Books = (props) => {
@@ -9,8 +9,36 @@ const Books = (props) => {
 
   const [genre, setGenre] = useState('')
 
-  const [loadBooks, result] = useLazyQuery(GENRE_BOOKS)
+  /*
+  * Huom. Saattaisi olla järkevämpää tehdä vain yksi
+  * useQuery, jota sitten päivitettäisiin subscriptioilla ja
+  * filtteröitäisiin clientissä, mutta koska aikaisemmassa
+  * tehtävässä haluttiin, että tehdään filtteröinti palvelimella,
+  * niin annetaan tämän nyt olla 'no-cache' ja *joka paikassa* tuo
+  * subscribeToMore. 
+  */
+  const [loadBooks, result] = useLazyQuery(GENRE_BOOKS, {
+    fetchPolicy: 'no-cache'
+  })
 
+  resultGenres.subscribeToMore({
+    document: BOOK_ADDED,
+    updateQuery: (prev, { subscriptionData }) => {
+      if (!subscriptionData.data) return prev
+      const origGenres
+      = [...new Set(prev
+        .allBooks
+        .flatMap(b => b.genres))]
+      const genres
+        = subscriptionData.data.bookAdded.genres
+          .filter(g => !origGenres.includes(g))
+      if (!genres.length) return prev
+      return {
+        ...prev,
+        allBooks: [ { genres: genres }, ...prev.allBooks ]
+      }
+    }
+  })
 
   useEffect(() => {
     loadBooks({ variables: { genre: genre } })

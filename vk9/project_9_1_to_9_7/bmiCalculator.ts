@@ -12,20 +12,21 @@ textMode.set(15, "Severely underweight ")
 textMode.set(Number.MIN_VALUE, "Very severely underweight")
 
 
-
-const calculateBmi = (height: number, mass: number): string => {
+export const calculateBmi = (height: number, mass: number): string => {
     const bmi: number = mass / (height*10**(-2))**2
     for (let [key, value] of textMode)
         if (bmi >= key) return value
     throw new Error("Weird error: bmi is less than Number.MIN_VALUE!")
 }
 
-const argv = process.argv.slice(2).map(Number)
+if (!module.parent) {
 
-const emessage = "give me a number! (bad args)"
+    const argv = process.argv.slice(2).map(Number)
+    
+    const emessage = "give me a number! (bad args)"
 
-for (let input of argv)
-    if (isNaN(input)) throw new Error(emessage)
+    for (let input of argv)
+        if (isNaN(input)) throw new Error(emessage)
 
-console.log(calculateBmi(argv[0], argv[1]))
-
+    console.log(calculateBmi(argv[0], argv[1]))
+}

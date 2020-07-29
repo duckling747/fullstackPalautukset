@@ -42,7 +42,7 @@ interface exerciseSummary {
     explanation: string
 }
 
-const calculateExercises = (dailyHours: Array<number>, target: number):
+export const calculateExercises = (dailyHours: Array<number>, target: number):
   exerciseSummary => {
     const average = avg(dailyHours)
     const rating = rateMe(average, target)
@@ -57,12 +57,15 @@ const calculateExercises = (dailyHours: Array<number>, target: number):
     }
 }
 
-const [target, ...dailyHours] = process.argv.slice(2).map(Number)
+if (!module.parent) {
+    const [target, ...dailyHours] = process.argv.slice(2).map(Number)
 
-const errormessage = "give me a number! (bad args)"
+    const errormessage = "give me a number! (bad args)"
 
-if (isNaN(target)) throw new Error(errormessage)
-for (let input of dailyHours) if (isNaN(input))
-    throw new Error(errormessage)
+    if (isNaN(target)) throw new Error(errormessage)
+    for (let input of dailyHours) if (isNaN(input))
+        throw new Error(errormessage)
 
-console.log(calculateExercises(dailyHours, target))
+    console.log(calculateExercises(dailyHours, target))
+
+}

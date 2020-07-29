@@ -17,6 +17,7 @@ const calculateBmi = (height: number, mass: number): string => {
     const bmi: number = mass / (height*10**(-2))**2
     for (let [key, value] of textMode)
         if (bmi >= key) return value
+    throw new Error("Weird error: bmi is less than Number.MIN_VALUE!")
 }
 
 const argv = process.argv.slice(2).map(Number)

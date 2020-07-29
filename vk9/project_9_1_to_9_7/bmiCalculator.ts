@@ -19,5 +19,12 @@ const calculateBmi = (height: number, mass: number): string => {
         if (bmi >= key) return value
 }
 
-console.log(calculateBmi(180, 74))
+const argv = process.argv.slice(2).map(Number)
+
+const emessage = "give me a number! (bad args)"
+
+for (let input of argv)
+    if (isNaN(input)) throw new Error(emessage)
+
+console.log(calculateBmi(argv[0], argv[1]))
 

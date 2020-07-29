@@ -57,4 +57,12 @@ const calculateExercises = (dailyHours: Array<number>, target: number):
     }
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+const [target, ...dailyHours] = process.argv.slice(2).map(Number)
+
+const errormessage = "give me a number! (bad args)"
+
+if (isNaN(target)) throw new Error(errormessage)
+for (let input of dailyHours) if (isNaN(input))
+    throw new Error(errormessage)
+
+console.log(calculateExercises(dailyHours, target))

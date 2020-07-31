@@ -1,6 +1,6 @@
 import { Patient } from '../src/types';
 
-const patients: Array<Patient> =
+const data =
 
     [
         {
@@ -44,5 +44,11 @@ const patients: Array<Patient> =
             "occupation": "Digital evangelist"
         }
     ];
+
+const patients: Array<Patient> = data.map(obj => {
+    const object = obj as Patient;
+    object.id = obj.id;
+    return object;
+});
 
 export default patients;

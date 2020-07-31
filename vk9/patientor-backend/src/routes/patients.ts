@@ -1,23 +1,20 @@
 import express from 'express';
-import patients from '../../data/patients';
+import patientService from '../services/patientService';
 
-import { Patient } from '../types';
+import { NewPatient, Patient } from '../types';
+import { getPatient } from '../utils';
 
-const getPatients = (): Array<Omit<Patient, 'ssn'>> => {
-    return patients
-        .map(({id, name, dateOfBirth, occupation, gender}) => ({
-            id,
-            name,
-            gender,
-            dateOfBirth,
-            occupation
-        }));
-};
 
 const router = express.Router();
 
 router.get('', (_req, res) => {
-    res.json(getPatients());
+    res.json(patientService.getPatients());
+});
+
+router.post('', (req, res) => {
+    const newPatient: NewPatient = getPatient(req);
+    const patient: Patient = patientService.addPatient(newPatient);
+    res.json(patient);
 });
 
 export default router;

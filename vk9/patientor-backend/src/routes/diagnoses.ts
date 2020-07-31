@@ -1,10 +1,10 @@
 import express from 'express';
-import diagnoses from '../../data/diagnoses';
+import diagnosisService from '../services/diagnosisService';
 
 import { Diagnose } from '../types';
 
 const getDiagnoses = (): Array<Diagnose> => {
-    return diagnoses;
+    return diagnosisService.getDiagnoses();
 };
 
 const router = express.Router();

@@ -8,8 +8,10 @@ import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 import HealthRatingBar from "../components/HealthRatingBar";
 import { useStateValue } from "../state";
+import { Link } from "react-router-dom";
 
 const PatientListPage: React.FC = () => {
+
   const [{ patients }, dispatch] = useStateValue();
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
@@ -22,6 +24,25 @@ const PatientListPage: React.FC = () => {
     setError(undefined);
   };
 
+  React.useEffect(() => {
+    axios.get<void>(`${apiBaseUrl}/ping`)
+      .catch(e => console.log(e));
+
+    const fetchPatientList = async () => {
+      try {
+        const { data: patientListFromApi } = await axios.get<Patient[]>(
+          `${apiBaseUrl}/patients`
+        );
+        dispatch({ type: "SET_PATIENT_LIST", payload: patientListFromApi });
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchPatientList()
+      .catch(e => console.log(e));
+  }, [dispatch]);
+
   const submitNewPatient = async (values: PatientFormValues) => {
     try {
       const { data: newPatient } = await axios.post<Patient>(
@@ -31,7 +52,9 @@ const PatientListPage: React.FC = () => {
       dispatch({ type: "ADD_PATIENT", payload: newPatient });
       closeModal();
     } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       console.error(e.response.data);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       setError(e.response.data.error);
     }
   };
@@ -53,7 +76,11 @@ const PatientListPage: React.FC = () => {
         <Table.Body>
           {Object.values(patients).map((patient: Patient) => (
             <Table.Row key={patient.id}>
-              <Table.Cell>{patient.name}</Table.Cell>
+              <Table.Cell>
+                <Link to={`/details/${patient.id}`}>
+                  {patient.name}
+                </Link>
+              </Table.Cell>
               <Table.Cell>{patient.gender}</Table.Cell>
               <Table.Cell>{patient.occupation}</Table.Cell>
               <Table.Cell>

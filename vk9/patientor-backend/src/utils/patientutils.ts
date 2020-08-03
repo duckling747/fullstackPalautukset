@@ -21,7 +21,7 @@ const parsePatient = (patient: NewPatient): boolean => {
     );
 };
 
-export const getPatient = (req: express.Request): NewPatient => {
+export const parsePatientFromReq = (req: express.Request): NewPatient => {
     const patient: NewPatient = req.body as NewPatient;
     if (!parsePatient(patient))
         throw new Error('Incorrect or missing field in Patient');

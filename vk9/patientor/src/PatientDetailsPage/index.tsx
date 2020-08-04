@@ -1,7 +1,7 @@
 import React from 'react';
 import { Patient } from '../types';
 import { Icon, Header } from 'semantic-ui-react';
-import { useStateValue, Action } from '../state';
+import { useStateValue, Action, addPatient } from '../state';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { apiBaseUrl } from '../constants';
@@ -21,7 +21,7 @@ const fetchPatientById
         const { data: newPatient } = await axios.get<Patient>(
         `${apiBaseUrl}/patients/${id}`
         );
-        dispatch({ type: "ADD_PATIENT", payload: newPatient });
+        dispatch(addPatient(newPatient));
       } catch (e) {
         console.error(e);
       }

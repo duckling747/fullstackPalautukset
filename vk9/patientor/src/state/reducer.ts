@@ -11,6 +11,21 @@ export type Action =
       payload: Patient;
     };
 
+export const setPatientList = (list: Array<Patient>): Action => {
+  return {
+    payload: list,
+    type: "SET_PATIENT_LIST"
+  };
+};
+
+export const addPatient = (patient: Patient): Action => {
+  return {
+    payload: patient,
+    type: "ADD_PATIENT"
+  };
+};
+
+
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "SET_PATIENT_LIST":

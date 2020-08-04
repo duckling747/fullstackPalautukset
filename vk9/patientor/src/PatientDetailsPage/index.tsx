@@ -5,6 +5,7 @@ import { useStateValue, Action, addPatient } from '../state';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { apiBaseUrl } from '../constants';
+import Entries from './Entries';
 
 const iconsNames = (gender: string) => {
     switch (gender) {
@@ -65,6 +66,8 @@ const PatientDetailPage: React.FC = () => {
             occupation: {patient.occupation}
           </p>
           {dateOfBirthRow}
+          <Header as="h3">entries</Header>
+          <Entries entries={patient.entries} />
         </>
     );
 };

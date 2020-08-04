@@ -5,13 +5,13 @@ import { v4 as uuid } from 'uuid';
 
 const getPatients = (): Array<PublicPatient> => {
     return patientData
-        .map(({ id, name, dateOfBirth, occupation, gender }) => ({
+        .map(({ id, name, dateOfBirth, occupation, gender, entries }) => ({
             id,
             name,
             gender,
             dateOfBirth,
             occupation,
-            entries: []
+            entries
         }));
 };
 

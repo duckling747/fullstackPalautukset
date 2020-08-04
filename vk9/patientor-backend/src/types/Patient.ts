@@ -13,4 +13,4 @@ export interface Patient {
 
 export type NewPatient = Omit<Patient, 'id'>;
 
-export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
+export type PublicPatient = Omit<Patient, 'ssn'>;

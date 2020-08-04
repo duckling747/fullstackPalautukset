@@ -81,7 +81,7 @@ export const DiagnosisSelection = ({
   diagnoses: Diagnosis[];
   setFieldValue: FormikProps<{ diagnosisCodes: string[] }>["setFieldValue"];
   setFieldTouched: FormikProps<{ diagnosisCodes: string[] }>["setFieldTouched"];
-}) => {
+}): JSX.Element => {
   const field = "diagnosisCodes";
   const onChange = (
     _event: React.SyntheticEvent<HTMLElement, Event>,

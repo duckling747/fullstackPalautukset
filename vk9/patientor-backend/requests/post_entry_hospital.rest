@@ -1,0 +1,13 @@
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+    "date": "2016-01-01",
+    "type": "Hospital",
+    "specialist": "MD House",
+    "description": "Another finger crushed",
+    "discharge": {
+        "date": "2016-01-10",
+        "criteria": "Patient stops crying over finger."
+    }
+}

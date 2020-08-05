@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/patients/d2773822-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+    "date": "2020-01-01",
+    "type": "HealthCheck",
+    "specialist": "MD Wilson",
+    "description": "Patient is pregnant",
+    "healthCheckRating": 0
+}

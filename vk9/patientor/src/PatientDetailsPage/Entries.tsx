@@ -12,11 +12,11 @@ const Entries:
     return(
         <>
         {
-            entries.map((e, i) =>
-            <div key={i}>
-                <EntryDetails entry={e} />
+          entries.map((e, i) =>
+            <div key={i+1000}>
+              <EntryDetails entry={e} />
             </div>
-            )
+          )
         }
         </>
     );

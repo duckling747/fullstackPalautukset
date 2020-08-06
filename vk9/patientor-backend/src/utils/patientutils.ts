@@ -1,6 +1,6 @@
 import { NewPatient, Gender, HealthCheckEntry, Entry, HospitalEntry,
     OccupationalHealthCareEntry,
-    Diagnose, HealthCheckRating
+    HealthCheckRating
 } from '../types';
 import express from 'express';
 
@@ -42,12 +42,7 @@ const parsePatient = (patient: NewPatient): boolean => {
 
 const parseDiagnosisCodes = (codes: unknown): boolean => {
     return Array.isArray(codes) && codes.every(item => {
-        const diag = item as Diagnose;
-        return (
-            diag.code && isString(diag.code)
-            && diag.name && isString(diag.name)
-            && (diag.latin ? (isString(diag.latin)) : true)
-        );
+        return isString(item);
     });
 };
 

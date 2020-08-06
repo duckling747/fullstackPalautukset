@@ -21,6 +21,7 @@ const addPatient = (patient: NewPatient): Patient => {
         ...patient,
         id
     };
+    if (!addedPatient.entries) addedPatient.entries = [];
     patientData.push(addedPatient);
     return addedPatient;
 };

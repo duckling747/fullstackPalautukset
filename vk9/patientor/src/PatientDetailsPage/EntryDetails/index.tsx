@@ -35,7 +35,7 @@ const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
     if (diagnosesIsNotPopulated) return null;
 
     const diags
-      = entry.diagnosisCodes
+      = entry.diagnosisCodes?.length
       ?
       <>
         <Header as="h4">Diagnoses</Header>

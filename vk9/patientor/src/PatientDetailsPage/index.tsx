@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
-import { Patient, Diagnose } from '../types';
-import { Icon, Header } from 'semantic-ui-react';
-import { useStateValue, Action, addPatient, setDiagnoses } from '../state';
+import React, { useEffect, CSSProperties } from 'react';
+import { Patient, Diagnose, Entry } from '../types';
+import { Icon, Header, Button, ButtonGroup, Popup } from 'semantic-ui-react';
+import { useStateValue, Action, addPatient, setDiagnoses, addEntry } from '../state';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { apiBaseUrl } from '../constants';
 import Entries from './Entries';
+import EntryModal from '../EntryForms';
+import { EntryFormValues, formSwitch } from '../EntryForms/types';
 
 const iconsNames = (gender: string) => {
     switch (gender) {
@@ -41,6 +43,21 @@ const fetchDiagnosisMappings = async (dispatch: React.Dispatch<Action>) => {
 
 const PatientDetailPage: React.FC = () => {
 
+    const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+
+    const [error, setError] = React.useState<string | undefined>();
+
+    const [modalType, setModalType] = React.useState<formSwitch>(formSwitch.hospital);
+
+    const openModal = (): void => {
+      setModalOpen(true);
+    };
+
+    const closeModal = (): void => {
+      setModalOpen(false);
+      setError(undefined);
+    };
+
     const [{ patients, diagnoses }, dispatch] = useStateValue();
 
     const diagnosesPopulated = Object.values(diagnoses).length > 0;
@@ -74,6 +91,43 @@ const PatientDetailPage: React.FC = () => {
         ? <p>date of birth: {patient.dateOfBirth}</p>
         : null;
     
+    const bAddHospitalEntryHandler = () => {
+      setModalType(formSwitch.hospital);
+      openModal();
+    };
+
+    const bAddOccupationalEntryHandler = () => {
+      setModalType(formSwitch.occupational);
+      openModal();
+    };
+
+    const bAddHealthCheckEntryHandler = () => {
+      setModalType(formSwitch.healthCheck);
+      openModal();
+    };
+
+    const bAddStyle: CSSProperties = {
+      margin: "20px",
+      display: "flex"
+    };
+
+    const submitNewEntry = async (values: EntryFormValues) => {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { data: entry } = await axios.post<Entry>(
+          `${apiBaseUrl}/patients/${patient.id}/entries`,
+          values
+        );
+        dispatch(addEntry(entry, patient.id));
+        closeModal();
+      } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        console.error(e.response.data);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        setError(e.response.data.error);
+      }
+    };
+
     return (
         <>
           <Header as="h2">{patient.name}</Header>
@@ -85,8 +139,52 @@ const PatientDetailPage: React.FC = () => {
             occupation: {patient.occupation}
           </p>
           {dateOfBirthRow}
-          <Header as="h3">entries</Header>
+          <Header as="h3">
+            Entries
+          </Header>
           <Entries entries={patient.entries} />
+          <EntryModal
+            modalOpen={modalOpen}
+            onSubmit={submitNewEntry}
+            error={error}
+            onClose={closeModal}
+            type={modalType}
+          />
+          <ButtonGroup style={bAddStyle}>
+            <Popup content="Add a new hospital entry"
+              trigger={
+                <Button
+                  color="blue"
+                  icon="hospital"
+                  size="large"
+                  onClick={bAddHospitalEntryHandler}
+                />
+              }
+              position="top center"
+            />
+            <Popup content="Add a new occupational healthcare entry"
+              trigger={
+                <Button
+                  color="blue"
+                  icon="configure"
+                  size="large"
+                  onClick={bAddOccupationalEntryHandler}
+                />
+              }
+              position="top center"
+            />
+            <Popup content="Add a new health check entry"
+              trigger={
+                <Button
+                  color="blue"
+                  icon="stethoscope"
+                  size="large"
+                  onClick={bAddHealthCheckEntryHandler}
+                />
+              }
+              position="top center"
+            />
+          </ButtonGroup>
         </>
     );
 };

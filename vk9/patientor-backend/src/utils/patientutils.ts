@@ -43,7 +43,7 @@ const parseDiagnosisCodes = (codes: unknown): boolean => {
         return (
             diag.code && isString(diag.code)
             && diag.name && isString(diag.name)
-            && diag.latin ? (isString(diag.latin)) : true
+            && (diag.latin ? (isString(diag.latin)) : true)
         );
     });
 };
@@ -68,10 +68,10 @@ const parseHospital = (entry: HospitalEntry): boolean => {
 const parseOccupational = (entry: OccupationalHealthCareEntry): boolean => {
     return Boolean(
         entry.employerName && isString(entry.employerName)
-        && entry.sickLeave ? (
+        && (entry.sickLeave ? (
             entry.sickLeave.startDate && isString(entry.sickLeave.startDate)
             && entry.sickLeave.endDate && isString(entry.sickLeave.endDate)
-        ) : true
+        ) : true)
     );
 };
 
@@ -82,9 +82,9 @@ const parseEntry = (entry: Entry): boolean => {
         && entry.description && isString(entry.description)
         && entry.specialist && isString(entry.specialist)
         && entry.type && isString(entry.type)
-        && entry.diagnosisCodes ? (
+        && (entry.diagnosisCodes ? (
             parseDiagnosisCodes(entry.diagnosisCodes)
-        ) : true
+        ) : true)
     )) return false;
     switch (entry.type) {
         case "HealthCheck": return parseHealthCheck(entry);

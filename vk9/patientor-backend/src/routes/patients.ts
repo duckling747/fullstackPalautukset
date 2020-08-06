@@ -18,7 +18,8 @@ router.post('', (req, res) => {
         const patient: Patient = patientService.addPatient(newPatient);
         res.json(patient);
     } catch (e) {
-        res.status(400).json({ error: "Parsing/validation error (check input)" });
+        // eslint-disable-next-line
+        res.status(400).json({ error: e.message });
     }
 });
 
@@ -44,7 +45,8 @@ router.post('/:id/entries', (req, res) => {
         }
         res.json(entry);
     } catch (e) {
-        res.status(400).json({ error: "Parsing/validation error (check input)" });
+        // eslint-disable-next-line
+        res.status(400).json({ error: e.message });
     }
     
 });

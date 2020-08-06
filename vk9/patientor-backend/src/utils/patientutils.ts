@@ -22,7 +22,10 @@ const isNumber = (field: unknown): boolean => {
 };
 
 const isDate = (date: string): boolean => {
-    return Boolean(Date.parse(date));
+    if (Date.parse(date)) {
+        return true;
+    }
+    throw new Error(`${date} is not a date`);
 };
 
 const parsePatient = (patient: NewPatient): boolean => {

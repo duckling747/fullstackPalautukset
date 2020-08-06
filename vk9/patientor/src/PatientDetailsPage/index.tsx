@@ -7,7 +7,7 @@ import axios from 'axios';
 import { apiBaseUrl } from '../constants';
 import Entries from './Entries';
 import EntryModal from '../EntryForms';
-import { EntryFormValues, formSwitch } from '../EntryForms/types';
+import { EntryFormValues, formSwitch, OccupationalEntryFormValues } from '../EntryForms/types';
 
 const iconsNames = (gender: string) => {
     switch (gender) {
@@ -113,10 +113,18 @@ const PatientDetailPage: React.FC = () => {
 
     const submitNewEntry = async (values: EntryFormValues) => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let temp = values as OccupationalEntryFormValues;
+        if (temp.sickLeave?.startDate === ""
+          || temp.sickLeave?.endDate === "") {
+            temp = {
+              ...temp,
+              diagnosisCodes: [...temp.diagnosisCodes],
+              sickLeave: undefined
+            };
+        }
         const { data: entry } = await axios.post<Entry>(
           `${apiBaseUrl}/patients/${patient.id}/entries`,
-          values
+          temp
         );
         dispatch(addEntry(entry, patient.id));
         closeModal();

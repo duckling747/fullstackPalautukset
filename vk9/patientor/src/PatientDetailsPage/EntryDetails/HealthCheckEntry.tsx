@@ -7,7 +7,6 @@ const healthCheckToSpunkIcon = (rating: number) => {
         case 1:
         case 2:
         case 3:
-        case 4:
             return <Icon name="thumbs down outline" size="big"></Icon>;
         case 0:
             return <Icon name="thumbs up outline" size="big"></Icon>;

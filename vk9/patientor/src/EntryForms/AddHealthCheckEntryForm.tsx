@@ -2,8 +2,9 @@ import React from "react";
 import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 
-import { TextField } from "../AddPatientModal/FormField";
+import { TextField, NumberField, DiagnosisSelection } from "../AddPatientModal/FormField";
 import { HealthCheckEntryFormValues } from "./types";
+import { useStateValue } from "../state";
 
 
 interface Props {
@@ -12,6 +13,8 @@ interface Props {
 }
 
 const AddHealthCheckEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
+  const [{ diagnoses }] = useStateValue();
+
   return (
     <Formik
       initialValues={{
@@ -25,6 +28,7 @@ const AddHealthCheckEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
       onSubmit={onSubmit}
       validate={values => {
         const requiredError = "Field is required";
+        const numsWeird = "Health check rating off scope [0, 3]";
         const errors: { [field: string]: string } = {};
         if (!values.description) {
           errors.description = requiredError;
@@ -35,10 +39,13 @@ const AddHealthCheckEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         if (!values.specialist) {
           errors.specialist = requiredError;
         }
+        if (values.healthCheckRating > 3 || values.healthCheckRating < 0) {
+            errors.healthCheckRating = numsWeird;
+        }
         return errors;
       }}
     >
-      {({ isValid, dirty }) => {
+      {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
           <Form className="form ui">
             <Field
@@ -60,16 +67,16 @@ const AddHealthCheckEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               component={TextField}
             />
             <Field
-              label="Discharge criteria"
-              placeholder="Discharge criteria"
-              name="dischargeCriteria"
-              component={TextField}
+                label="healthCheckRating"
+                name="healthCheckRating"
+                component={NumberField}
+                min={0}
+                max={3}
             />
-            <Field
-              label="Discharge date"
-              placeholder="YYYY-MM-DD"
-              name="dischargeDate"
-              component={TextField}
+            <DiagnosisSelection
+              setFieldValue={setFieldValue}
+              setFieldTouched={setFieldTouched}
+              diagnoses={Object.values(diagnoses)}
             />
             <Grid>
               <Grid.Column floated="left" width={5}>
